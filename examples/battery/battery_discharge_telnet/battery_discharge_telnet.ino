@@ -12,7 +12,8 @@
  * USB-C plugged in.)
  * 
  * Save the resulting data and provide to the python script in src/tools
- * to get the constants in heltec.h.
+ * to get the constants in heltec.h. The discharge curve I used is in
+ * the same directory.
 */
 
 #include <heltec.h>
@@ -29,7 +30,6 @@
 uint64_t last_print;
 
 ESPTelnet telnet;
-IPAddress ip;
 uint16_t port = 23;
 
 void setup() {
@@ -57,15 +57,15 @@ void setup() {
     Serial.println("Error running telnet server.");
     while (true);
   }
-  ip = WiFi.localIP();
-  Serial.printf("Telnet to %s port %i.\n", ip, port);
+  Serial.printf("Telnet to %s port %i.\n", WiFi.localIP().toString().c_str(), port);
+  display.printf("Telnet to:\n  %s port %i.\n", WiFi.localIP().toString().c_str(), port);
 }
 
 void loop() {
   telnet.loop();
 
   // Print the battery voltage to serial and telnet every minute
-  if (!last_print || millis() - last_print > INTERVAL * 1000)) {
+  if (!last_print || millis() - last_print > INTERVAL * 1000) {
     int hr = millis() / 3600000;
     int min = (millis() / 60000) % 60;
     int sec = (millis() / 1000) % 60;
@@ -78,7 +78,8 @@ void loop() {
 
 void onTelnetConnect(String ip) {
   Serial.printf("Telnet: %s connected.\n", ip.c_str());
-  telnet.printf("Time, Voltage\n", ip.c_str());
+  display.printf("Connected:\n  %s\n", ip.c_str());
+  telnet.printf("Time, Voltage\n");
 }
 
 void onTelnetDisconnect(String ip) {

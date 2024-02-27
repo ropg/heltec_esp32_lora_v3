@@ -30,7 +30,7 @@
 // are the average voltages, expressed in 1/256'th steps between 
 // min_voltage and max_voltage for each 1/100 of the time it took to
 // discharge the battery. The code for a telnet server that outputs
-// battery voltage as CSV data is in the examples, and a python script
+// battery voltage as CSV data is in examples, and a python script
 // that outputs the constants below is in src/tools.
 const float min_voltage = 3.04;
 const float max_voltage = 4.26;

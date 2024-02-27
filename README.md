@@ -52,12 +52,13 @@ The board is capable of charging a LiPo battery connected to the little 2-pin co
 
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
 > * _You can optionally provide the float `VBat()` returns to `BatteryPercent()` to make sure both are based on the same measurement._
+> * _The [charging IC](images/tp4054.pdf) used will charge the battery to ~4.2V, then hold the voltage there until charge current is 1/10 the set current (i.e. 50 mA) and then stop and let it discharge to 4.05V (about 90%) and then charge it again, so this is expected._
 
-The battery percentage estimate in this library is based on a real LiPo discharge curve, see `heltec.h` for details.
+The battery percentage estimate in this library is based on a real LiPo discharge curve. You can even measure your own, see `heltec.h` for details.
 
 ![](/images/battery_curve.png)
 
-### Ve
+### Ve - external power
 
 There's two pins marked 'Ve', connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `Ve(true)`, `Ve(false)` to turn it off.
 
