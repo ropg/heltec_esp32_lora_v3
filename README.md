@@ -38,7 +38,7 @@ The tiny OLED display uses the same library that the original library from Helte
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
-####Printing to both Serial and display: `both.print()`
+#### Printing to both Serial and display: `both.print()`
 
 
 Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices.
