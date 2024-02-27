@@ -47,9 +47,27 @@ const uint8_t scaled_voltage[100] = {
     94, 90, 81, 80, 76, 73, 66, 52, 32, 7,
 };
 
+class PrintSplitter : public Print {
+  public:
+    PrintSplitter(Print &_a, Print &_b) : a(_a), b(_b) {}
+    size_t write(uint8_t c) {
+      a.write(c);
+      return b.write(c);
+    }
+    size_t write(const char* str) {
+      a.write(str);
+      return b.write(str);
+    }
+  private:
+    Print &a;
+    Print &b;
+};
+
 SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
 
 SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, GEOMETRY_128_64);
+
+PrintSplitter both(Serial, display);
 
 PinButton button(BUTTON);
 

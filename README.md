@@ -38,6 +38,11 @@ The tiny OLED display uses the same library that the original library from Helte
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
+####Printing to both Serial and display: `both.print()`
+
+
+Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices.
+
 ### [Button](https://github.com/poelstra/arduino-multi-button)
 
 The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in the`loop()` of your sketch if you use it.
@@ -51,8 +56,9 @@ The board has a bright white LED, next to the orange power/charge LED. This libr
 The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom. `VBat()` gives you a float with the battery voltage, `BatteryPercent()` provides the estimated percentage full. 
 
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
-> * _You can optionally provide the float `VBat()` returns to `BatteryPercent()` to make sure both are based on the same measurement._
+> * _You can optionally provide the float that `VBat()` returns to `BatteryPercent()` to make sure both are based on the same measurement._
 > * _The [charging IC](images/tp4054.pdf) used will charge the battery to ~4.2V, then hold the voltage there until charge current is 1/10 the set current (i.e. 50 mA) and then stop and let it discharge to 4.05V (about 90%) and then charge it again, so this is expected._
+> * _The orange charging LED is quite bright, and the IC on the reverse side of the reset switch gets quite hot while the battery is charging but still fairly empty. It's limited to 100 ℃, so nothing too bad can happen, just so you know._
 
 The battery percentage estimate in this library is based on a real LiPo discharge curve. You can even measure your own, see `heltec.h` for details.
 
