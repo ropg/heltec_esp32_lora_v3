@@ -7,7 +7,7 @@
 
 // Pause between transmited packets in seconds.
 // Set to zero to only transmit a packet when pressing the user button
-#define PAUSE               10
+#define PAUSE               120
 
 // Radio parameters. There's a decent explanation on 
 // https://www.thethingsnetwork.org/docs/lorawan/spreading-factors/
