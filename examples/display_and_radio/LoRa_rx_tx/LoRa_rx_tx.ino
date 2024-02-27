@@ -7,13 +7,13 @@
 
 // Pause between transmited packets in seconds.
 // Set to zero to only transmit a packet when pressing the user button
-#define PAUSE               120
+#define PAUSE               300
 
 // Radio parameters. There's a decent explanation on 
 // https://www.thethingsnetwork.org/docs/lorawan/spreading-factors/
 #define FREQUENCY           869.5       // for Europe
 #define BANDWIDTH           500
-#define SPREADING_FACTOR    12
+#define SPREADING_FACTOR    9
 #define TRANSMIT_POWER      22
 
 int state;
