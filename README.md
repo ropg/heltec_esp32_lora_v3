@@ -40,7 +40,7 @@ There's the primary display library and there's an additinal UI library that all
 
 ### [Button](https://github.com/poelstra/arduino-multi-button)
 
-The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in your `loop()` if you use it.
+The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in the`loop()` of your sketch if you use it.
 
 ### LED
 
@@ -48,9 +48,14 @@ The board has a bright white LED, next to the orange power/charge LED. This libr
 
 ### Battery
 
-The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom.
+The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom. `VBat()` gives you a float with the battery voltage, `BatteryPercent()` provides the estimated percentage full. 
 
-> _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
+> * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
+> * _You can optionally provide the float `VBat()` returns to `BatteryPercent()` to make sure both are based on the same measurement._
+
+The battery percentage estimate in this library is based on a real LiPo discharge curve, see `heltec.h` for details.
+
+![](/images/battery_curve.png)
 
 ### Ve
 
@@ -60,8 +65,10 @@ There's two pins marked 'Ve', connected to a GPIO-controlled FET that can source
 
 &nbsp;
 
+## Minimal example to show everything:
+
 ```cpp
-// creates 'radio', 'display' and 'button' instances
+// creates 'radio', 'display' and 'button' instances 
 #include <heltec.h>
 
 void setup() {
@@ -77,22 +84,22 @@ void setup() {
   } else {
     display.printf("fail, code: %i\n", state);
   }
+  // Battery
+  float vbat = VBat();
+  display.printf("Vbat: %.2fV (%d%%)\n", vbat, BatteryPercent(vbat));
 }
 
 void loop() {
   heltec_loop();
+  // Button
   if (button.isSingleClick()) {
     display.println("Button works");
     // LED
-    for (int n = 0; n <= 100; n++) {
-      led(n);   // percent brightness
-      delay(10);
-    }
-    led(0);
+    for (int n = 0; n <= 100; n++) { led(n); delay(5); }
+    for (int n = 100; n >= 0; n--) { led(n); delay(5); }
     display.println("LED works");
   }
 }
-
 ```
 
 &nbsp;
