@@ -69,7 +69,7 @@ void loop() {
     int hr = millis() / 3600000;
     int min = (millis() / 60000) % 60;
     int sec = (millis() / 1000) % 60;
-    float vbat = VBat();
+    float vbat = heltec_vbat();
     telnet.printf("%02d:%02d:%02d, %.2f\n", hr, min, sec, vbat);
     Serial.printf("%02d:%02d:%02d, %.2f\n", hr, min, sec, vbat);
     last_print = millis();

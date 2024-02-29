@@ -1,3 +1,6 @@
+// Turns the 'PRG' button into the power button, long press is off 
+#define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
+
 // creates 'radio', 'display' and 'button' instances 
 #include <heltec.h>
 
@@ -15,8 +18,8 @@ void setup() {
     display.printf("fail, code: %i\n", state);
   }
   // Battery
-  float vbat = VBat();
-  display.printf("Vbat: %.2fV (%d%%)\n", vbat, BatteryPercent(vbat));
+  float vbat = heltec_vbat();
+  display.printf("Vbat: %.2fV (%d%%)\n", vbat, heltec_battery_percent(vbat));
 }
 
 void loop() {
@@ -25,8 +28,8 @@ void loop() {
   if (button.isSingleClick()) {
     display.println("Button works");
     // LED
-    for (int n = 0; n <= 100; n++) { led(n); delay(5); }
-    for (int n = 100; n >= 0; n--) { led(n); delay(5); }
+    for (int n = 0; n <= 100; n++) { heltec_led(n); delay(5); }
+    for (int n = 100; n >= 0; n--) { heltec_led(n); delay(5); }
     display.println("LED works");
   }
 }

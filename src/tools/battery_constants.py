@@ -33,7 +33,7 @@ def main(filename):
     print("const uint8_t scaled_voltage[100] = {")
     for i in range(0, 100, 10):
         line = ", ".join(map(str, scaled_voltages[i:i+10]))
-        print(f"    {line},")
+        print(f"  {line},")
     print("};")
 
 if __name__ == "__main__":

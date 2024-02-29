@@ -52,9 +52,9 @@ void loop() {
   if ((PAUSE && millis() - lastTX > (PAUSE * 1000)) || button.isSingleClick()) {
     display.printf("TX [%s] ", String(counter).c_str());
     radio.clearDio1Action();
-    led(50); // 50% brightness is plenty for this LED
+    heltec_led(50); // 50% brightness is plenty for this LED
     state = radio.transmit(String(counter).c_str());
-    led(0);
+    heltec_led(0);
     lastTX = millis();
     radio.setDio1Action(rx);
     radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF);
