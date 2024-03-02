@@ -11,10 +11,6 @@
 #ifndef heltec_h
 #define heltec_h
 
-#ifndef HELTEC_NO_RADIOLIB
-  #include <RadioLib.h>
-#endif
-
 #include "display/SSD1306Wire.h"
 #include "display/OLEDDisplayUi.h"
 
@@ -59,6 +55,94 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7,
 };
 
+#ifndef HELTEC_NO_RADIOLIB
+  #include <RadioLib.h>
+
+  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+
+  int radio_result;
+  bool _radio_debug = true;
+
+  /** @brief Whether or not the convenience macros should print RadioLib commands and results information.
+   * 
+   * @param state 
+  */
+  #define RADIO_DEBUG(state) _radio_debug = state;
+
+  /**
+   * @brief Convenience macro for issuing RadioLib commands.
+   * 
+   * @param action The RadioLib command to issue, without the "radio." prefix.
+  */
+  #define RADIO(action)\
+    radio_result = radio.action;\
+    radio_print_result(radio_result, #action);
+
+  /**
+   * @brief Convenience macro for issuing RadioLib commands and halting the program if the command fails.
+   * 
+   * (You can still turn off the system if you have have set to use the button as power button.)
+   * 
+   * @param action The RadioLib command to issue, without the "radio." prefix.
+  */
+  #define RADIO_OR_HALT(action)\
+    radio_result = radio.action;\
+    radio_print_result(radio_result, #action);\
+    if (radio_result != RADIOLIB_ERR_NONE) {\
+      Serial.println("Halted.");\
+      while (true) { heltec_delay(10); }\
+    }
+
+  /**
+   * Prints a RadioLib command and its result code. Adds textual representaion for a few common ones, URL to look up for all others.
+   *
+   * @param result The result of the radio action.
+   * @param action The description of the radio action.
+   */
+  void radio_print_result(const int result, const char* action) {
+    if (!_radio_debug) return;
+    String result_str;
+    // Just a few common ones that people get often
+    switch (result) {
+    case RADIOLIB_ERR_NONE:
+      result_str = "ERR_NONE";
+      break;
+    case RADIOLIB_ERR_CHIP_NOT_FOUND:
+      result_str = "ERR_CHIP_NOT_FOUND";
+      break;
+    case RADIOLIB_ERR_PACKET_TOO_LONG:
+      result_str = "ERR_PACKET_TOO_LONG";
+      break;
+    case RADIOLIB_ERR_RX_TIMEOUT:
+      result_str = "ERR_RX_TIMEOUT";
+      break;
+    case RADIOLIB_ERR_CRC_MISMATCH:
+      result_str = "ERR_CRC_MISMATCH";
+      break;
+    case RADIOLIB_ERR_INVALID_BANDWIDTH:
+      result_str = "ERR_INVALID_BANDWIDTH";
+      break;
+    case RADIOLIB_ERR_INVALID_SPREADING_FACTOR:
+      result_str = "ERR_INVALID_SPREADING_FACTOR";
+      break;
+    case RADIOLIB_ERR_INVALID_CODING_RATE:
+      result_str = "ERR_INVALID_CODING_RATE";
+      break;
+    case RADIOLIB_ERR_INVALID_FREQUENCY:
+      result_str = "ERR_INVALID_FREQUENCY";
+      break;
+    case RADIOLIB_ERR_INVALID_OUTPUT_POWER:
+      result_str = "ERR_INVALID_OUTPUT_POWER";
+      break;
+    default:
+      result_str = "See https://github.com/jgromes/RadioLib/blob/master/src/TypeDef.h for meaning of RadioLib error codes.";
+      break;
+    }
+    Serial.printf("radio.%s returned %i (%s)\n", action, result, result_str.c_str());
+  }
+
+#endif
+
 /**
  * @class PrintSplitter
  * @brief A class that splits the output of the Print class to two different Print objects.
@@ -81,10 +165,6 @@ class PrintSplitter : public Print {
     Print &a;
     Print &b;
 };
-
-#ifndef HELTEC_NO_RADIOLIB
-  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
-#endif
 
 SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, GEOMETRY_128_64);
 
@@ -222,17 +302,10 @@ bool heltec_wakeup_was_timer() {
 /**
  * @brief Initializes the Heltec library.
  * 
- * This function initializes the Heltec library by setting up the necessary components,
- * such as the Serial communication, the display, and the power button.
- * If the power button feature is used, makes sure the device starts in off state after reset
- * or battery voltage is gone.
+ * This function initializes the Heltec library by setting up
+ * Serial port and display.
  */
 void heltec_setup() {
-  #ifdef HELTEC_POWER_BUTTON
-    if (!heltec_wakeup_was_button() && !heltec_wakeup_was_timer()){
-      heltec_deep_sleep();
-    }
-  #endif
   Serial.begin(115200);
   display.init();
   display.flipScreenVertically();
