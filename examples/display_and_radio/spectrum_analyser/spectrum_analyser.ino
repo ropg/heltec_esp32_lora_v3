@@ -19,7 +19,7 @@
 #include <modules/SX126x/patches/SX126x_patch_scan.h>
 
 // Prints the scan measurement bins from the SX1262 in hex
-#define DEBUG_PRINT
+// #define DEBUG_PRINT
 
 // Various other parameters
 #define STEPS 128
@@ -29,7 +29,7 @@
 #define X_AXIS_WEIGHT 2
 #define HEIGHT RADIOLIB_SX126X_SPECTRAL_SCAN_RES_SIZE
 #define SCALE_TEXT_TOP (HEIGHT + X_AXIS_WEIGHT + MAJOR_TICK_LENGTH)
-#define STATUS_TEXT_TOP (64 - 10)
+#define STATUS_TEXT_TOP (64 - 14)
 #define RANGE (float)(FREQ_END - FREQ_BEGIN)
 #define SINGLE_STEP (float)(RANGE / STEPS)
 
