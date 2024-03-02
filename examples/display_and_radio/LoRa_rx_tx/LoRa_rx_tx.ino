@@ -65,7 +65,7 @@ void loop() {
   if ((PAUSE && tx_legal && millis() - last_tx > (PAUSE * 1000)) || button.isSingleClick()) {
     // In case of button click, tell user to wait
     if (!tx_legal) {
-      both.printf("Legal limit, wait %is.\n", ((minimum_pause - (millis() - last_tx)) / 1000) + 1);
+      both.printf("Legal limit, wait %i sec.\n", ((minimum_pause - (millis() - last_tx)) / 1000) + 1);
       return;
     }
     both.printf("TX [%s] ", String(counter).c_str());
