@@ -276,10 +276,14 @@ void heltec_loop() {
  * @param ms The number of milliseconds to delay.
  */
 void heltec_delay(int ms) {
-  for (int n = 0; n < ms; n += 10) {
+  uint64_t start = millis();
+  while (true) {
     heltec_loop();
-    delay(10);
+    delay(1);
+    if (millis() - start >= ms) {
+      break;
+    }
   }
-} 
+}
 
 #endif
