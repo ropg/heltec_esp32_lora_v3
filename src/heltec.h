@@ -72,6 +72,8 @@ const uint8_t scaled_voltage[100] = {
   /**
    * @brief Convenience macro for issuing RadioLib commands.
    * 
+   * These convenience macros can only be used for RadioLib functions that return an int.
+   * 
    * @param action The RadioLib command to issue, without the "radio." prefix.
   */
   #define RADIO(action)\
@@ -81,7 +83,9 @@ const uint8_t scaled_voltage[100] = {
   /**
    * @brief Convenience macro for issuing RadioLib commands and halting the program if the command fails.
    * 
-   * (You can still turn off the system if you have have set to use the button as power button.)
+   * These convenience macros can only be used for RadioLib functions that return an int.
+   * 
+   * When halted you can still turn off the system if you have have set to use the button as power button.
    * 
    * @param action The RadioLib command to issue, without the "radio." prefix.
   */
