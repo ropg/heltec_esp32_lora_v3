@@ -15,6 +15,7 @@
 // Will not exceed 1% duty cycle, even if you set a lower value.
 #define PAUSE               300
 
+// Frequency in MHz. Keep the decimal point to designate float.
 // Check your own rules and regulations to see what is legal where you are.
 #define FREQUENCY           866.3       // for Europe
 // #define FREQUENCY           905.2       // for US
@@ -27,9 +28,11 @@
 // meaning (in nutshell) longer range and more robust against interference. 
 #define SPREADING_FACTOR    9
 
-// Transmit power in dBm. 14 dBm = 25 mW, which is the legal maximum ERP in the EU ISM bands.
-// The story is more complex and also depends on your antenna.
-#define TRANSMIT_POWER      14
+// Transmit power in dBm. 0 dBm = 1 mW, enough for tabletop-testing. This value can be
+// set anywhere between -9 dBm (0.125 mW) to 22 dBm (158 mW). Note that the maximum ERP
+// (which is what your antenna maximally radiates) on the EU ISM band is 25 mW, and that
+// transmissting without an antenna can damage your hardware.
+#define TRANSMIT_POWER      0
 
 String rxdata;
 volatile bool rxFlag = false;
@@ -41,20 +44,20 @@ uint64_t minimum_pause;
 void setup() {
   heltec_setup();
   both.println("Radio init");
-  RADIO_OR_HALT(begin());
+  RADIOLIB_OR_HALT(radio.begin());
   // Set the callback function for received packets
   radio.setDio1Action(rx);
   // Set radio parameters
   both.printf("Frequency: %.2f MHz\n", FREQUENCY);
-  RADIO_OR_HALT(setFrequency(FREQUENCY));
+  RADIOLIB_OR_HALT(radio.setFrequency(FREQUENCY));
   both.printf("Bandwidth: %.1f kHz\n", BANDWIDTH);
-  RADIO_OR_HALT(setBandwidth(BANDWIDTH));
+  RADIOLIB_OR_HALT(radio.setBandwidth(BANDWIDTH));
   both.printf("Spreading Factor: %i\n", SPREADING_FACTOR);
-  RADIO_OR_HALT(setSpreadingFactor(SPREADING_FACTOR));
+  RADIOLIB_OR_HALT(radio.setSpreadingFactor(SPREADING_FACTOR));
   both.printf("TX power: %i dBm\n", TRANSMIT_POWER);
-  RADIO_OR_HALT(setOutputPower(TRANSMIT_POWER));
+  RADIOLIB_OR_HALT(radio.setOutputPower(TRANSMIT_POWER));
   // Start receiving
-  RADIO_OR_HALT(startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+  RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
 }
 
 void loop() {
@@ -72,35 +75,35 @@ void loop() {
     radio.clearDio1Action();
     heltec_led(50); // 50% brightness is plenty for this LED
     tx_time = millis();
-    RADIO(transmit(String(counter++).c_str()));
+    RADIOLIB(radio.transmit(String(counter++).c_str()));
     tx_time = millis() - tx_time;
     heltec_led(0);
-    if (radio_result == RADIOLIB_ERR_NONE) {
+    if (_radiolib_status == RADIOLIB_ERR_NONE) {
       both.printf("OK (%i ms)\n", tx_time);
     } else {
-      both.printf("fail (%i)\n", radio_result);
+      both.printf("fail (%i)\n", _radiolib_status);
     }
     // Maximum 1% duty cycle
     minimum_pause = tx_time * 100;
     last_tx = millis();
     radio.setDio1Action(rx);
-    RADIO_OR_HALT(startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+    RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
   }
 
   // If a packet was received, display it and the RSSI and SNR
   if (rxFlag) {
     rxFlag = false;
     radio.readData(rxdata);
-    if (radio_result == RADIOLIB_ERR_NONE) {
+    if (_radiolib_status == RADIOLIB_ERR_NONE) {
       both.printf("RX [%s]\n", rxdata.c_str());
       both.printf("  RSSI: %.2f dBm\n", radio.getRSSI());
       both.printf("  SNR: %.2f dB\n", radio.getSNR());
     }
-    RADIO_OR_HALT(startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
+    RADIOLIB_OR_HALT(radio.startReceive(RADIOLIB_SX126X_RX_TIMEOUT_INF));
   }
 }
 
-// Can't do Serial pr display things here, takes too much time for the interrupt
+// Can't do Serial or display things here, takes too much time for the interrupt
 void rx() {
   rxFlag = true;
 }

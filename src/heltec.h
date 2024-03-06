@@ -11,13 +11,20 @@
 #ifndef heltec_h
 #define heltec_h
 
+#ifndef HELTEC_NO_RADIOLIB
+  #include "RadioLib/RadioLib.h"
+  // make sure the power off button works when using RADIOLIB_OR_HALT
+  #define RADIOLIB_DO_DURING_HALT heltec_delay(10)
+  #include "RadioLib_convenience.h"
+#endif
+
 #include "display/SSD1306Wire.h"
 #include "display/OLEDDisplayUi.h"
 
 #include "PinButton.h"
 
 // Heltec's pins_arduino.h calls the pin DIO0, but what they hooked up 
-// is actually DIO1 (!)
+// is actually called DIO1 on SX1262 (!)
 #define DIO1      DIO0
 
 #define BUTTON    GPIO_NUM_0
@@ -31,6 +38,10 @@
 
 #define VBAT_CTRL 37
 #define VBAT_ADC  1
+
+#ifndef HELTEC_NO_RADIOLIB
+  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+#endif
 
 // Don't you just hate it when battery percentages are wrong?
 // 
@@ -54,98 +65,6 @@ const uint8_t scaled_voltage[100] = {
   110, 110, 108, 106, 106, 104, 102, 101, 99, 97,
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7,
 };
-
-#ifndef HELTEC_NO_RADIOLIB
-  #include <RadioLib.h>
-
-  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
-
-  int radio_result;
-  bool _radio_debug = true;
-
-  /** @brief Whether or not the convenience macros should print RadioLib commands and results information.
-   * 
-   * @param state 
-  */
-  #define RADIO_DEBUG(state) _radio_debug = state;
-
-  /**
-   * @brief Convenience macro for issuing RadioLib commands.
-   * 
-   * These convenience macros can only be used for RadioLib functions that return an int.
-   * 
-   * @param action The RadioLib command to issue, without the "radio." prefix.
-  */
-  #define RADIO(action)\
-    radio_result = radio.action;\
-    radio_print_result(radio_result, #action);
-
-  /**
-   * @brief Convenience macro for issuing RadioLib commands and halting the program if the command fails.
-   * 
-   * These convenience macros can only be used for RadioLib functions that return an int.
-   * 
-   * When halted you can still turn off the system if you have have set to use the button as power button.
-   * 
-   * @param action The RadioLib command to issue, without the "radio." prefix.
-  */
-  #define RADIO_OR_HALT(action)\
-    radio_result = radio.action;\
-    radio_print_result(radio_result, #action);\
-    if (radio_result != RADIOLIB_ERR_NONE) {\
-      Serial.println("Halted.");\
-      while (true) { heltec_delay(10); }\
-    }
-
-  /**
-   * Prints a RadioLib command and its result code. Adds textual representaion for a few common ones, URL to look up for all others.
-   *
-   * @param result The result of the radio action.
-   * @param action The description of the radio action.
-   */
-  void radio_print_result(const int result, const char* action) {
-    if (!_radio_debug) return;
-    String result_str;
-    // Just a few common ones that people get often
-    switch (result) {
-    case RADIOLIB_ERR_NONE:
-      result_str = "ERR_NONE";
-      break;
-    case RADIOLIB_ERR_CHIP_NOT_FOUND:
-      result_str = "ERR_CHIP_NOT_FOUND";
-      break;
-    case RADIOLIB_ERR_PACKET_TOO_LONG:
-      result_str = "ERR_PACKET_TOO_LONG";
-      break;
-    case RADIOLIB_ERR_RX_TIMEOUT:
-      result_str = "ERR_RX_TIMEOUT";
-      break;
-    case RADIOLIB_ERR_CRC_MISMATCH:
-      result_str = "ERR_CRC_MISMATCH";
-      break;
-    case RADIOLIB_ERR_INVALID_BANDWIDTH:
-      result_str = "ERR_INVALID_BANDWIDTH";
-      break;
-    case RADIOLIB_ERR_INVALID_SPREADING_FACTOR:
-      result_str = "ERR_INVALID_SPREADING_FACTOR";
-      break;
-    case RADIOLIB_ERR_INVALID_CODING_RATE:
-      result_str = "ERR_INVALID_CODING_RATE";
-      break;
-    case RADIOLIB_ERR_INVALID_FREQUENCY:
-      result_str = "ERR_INVALID_FREQUENCY";
-      break;
-    case RADIOLIB_ERR_INVALID_OUTPUT_POWER:
-      result_str = "ERR_INVALID_OUTPUT_POWER";
-      break;
-    default:
-      result_str = "See https://github.com/jgromes/RadioLib/blob/master/src/TypeDef.h for meaning of RadioLib error codes.";
-      break;
-    }
-    Serial.printf("radio.%s returned %i (%s)\n", action, result, result_str.c_str());
-  }
-
-#endif
 
 /**
  * @class PrintSplitter

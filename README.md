@@ -26,7 +26,9 @@ Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shel
 
 ### [RadioLib](https://github.com/jgromes/RadioLib)
 
-As said, this library depends on RadioLib, meaning it should automatically be installed if you use the Arduino Library Manager to install this library. All RadioLib examples that should work with an SX1262 should work here, simply `#include <heltec.h>` and remove any code that creates a `radio` instance, it already exists when you include this library.
+This library includes a fork of RadioLib. This is because my fork uses RTC RAM on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the actual newest version of RadioLib instead of including a copy of it.
+
+All well as the radio-relevant examples in this library, all RadioLib examples that should work with an SX1262 should work here. Simply `#include <heltec.h>` and remove any code that creates a `radio` instance, it already exists when you include this library.
 
 > * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` and much of their own software as DIO0. The SX1262 IO pins start at DIO1._
 > * _If you place `#define HELTEC_NO_RADIOLIB` before `#include <heltec.h>`, RadioLib will not be included and this library won't create a radio object. Handy if you are not using the radio and need the space in flash for something else or if you want to use another radio library or so._

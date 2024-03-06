@@ -1,5 +1,3 @@
-/*  */
-
 /**
  * To use this, you need the ESPTelnet library from the Library Manager
  * 
@@ -38,14 +36,14 @@ void setup() {
   // Use a little bit more power
   display.invertDisplay();
   // Connect to Wifi
-  Serial.print("Wifi ");
+  both.print("Wifi ");
   WiFi.mode(WIFI_STA);
   WiFi.begin(SSID, PASSWORD);
   do {
     delay(2000);
-    Serial.print(".");
+    both.print(".");
   } while (WiFi.status() != WL_CONNECTED);
-  Serial.println(" connected.");
+  both.println(" connected.");
   WiFi.setAutoReconnect(true);
   WiFi.persistent(true);
   // Start the telnet server

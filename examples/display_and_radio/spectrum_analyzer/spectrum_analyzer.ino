@@ -19,7 +19,7 @@
 #include <modules/SX126x/patches/SX126x_patch_scan.h>
 
 // Prints the scan measurement bins from the SX1262 in hex
-// #define DEBUG_PRINT
+// #define PRINT_SCAN_VALUES
 
 // Various other parameters
 #define STEPS 128
@@ -40,18 +40,17 @@ void setup() {
   heltec_setup();
   // initialize SX1262 FSK modem at the initial frequency
   both.println("Init radio");
-  RADIO_OR_HALT(beginFSK(FREQ_BEGIN));
+  
+  RADIOLIB_OR_HALT(radio.beginFSK(FREQ_BEGIN));
   // upload a patch to the SX1262 to enable spectral scan
   // NOTE: this patch is uploaded into volatile memory,
   //       and must be re-uploaded on every power up
   both.println("Upload patch");
-  RADIO_OR_HALT(uploadPatch(sx126x_patch_scan, sizeof(sx126x_patch_scan)));
+  RADIOLIB_OR_HALT(radio.uploadPatch(sx126x_patch_scan, sizeof(sx126x_patch_scan)));
   // configure scan bandwidth and disable the data shaping
   both.println("Setting up radio");
-  RADIO_OR_HALT(setRxBandwidth(BANDWIDTH));
-  RADIO_OR_HALT(setDataShaping(RADIOLIB_SHAPING_NONE));
-  // scanning produces way too many messages
-  RADIO_DEBUG(false);
+  RADIOLIB_OR_HALT(radio.setRxBandwidth(BANDWIDTH));
+  RADIOLIB_OR_HALT(radio.setDataShaping(RADIOLIB_SHAPING_NONE));
   both.println("Starting scan");
   display.clear();
   // Put everything on the display
@@ -67,31 +66,31 @@ void loop() {
   // do the scan
   for (int x = 0; x < STEPS; x++) {
     float freq = FREQ_BEGIN + (RANGE * ((float) x / STEPS));
-    RADIO(setFrequency(freq));
+    radio.setFrequency(freq);
     // start spectral scan
-    RADIO(spectralScanStart(SAMPLES, 1));
+    radio.spectralScanStart(SAMPLES, 1);
     // wait for spectral scan to finish
     while(radio.spectralScanGetStatus() != RADIOLIB_ERR_NONE) {
       heltec_delay(1);
     }
     // read the results
-    RADIO(spectralScanGetResult(result));
+    radio.spectralScanGetResult(result);
     for (int y = 0; y < RADIOLIB_SX126X_SPECTRAL_SCAN_RES_SIZE; y++) {
-      #ifdef DEBUG_PRINT
+      #ifdef PRINT_SCAN_VALUES
         Serial.printf("%04X,", result[y]);
       #endif
       if (result[y]) {
         display.setPixel(x, y);
       }
     }
-    #ifdef DEBUG_PRINT
-      Serial.printf("\n");
+    #ifdef PRINT_SCAN_VALUES
+      Serial.println();
     #endif
     // wait a little bit before the next scan, otherwise the SX1262 hangs
     heltec_delay(9);
   }
-  #ifdef DEBUG_PRINT
-    Serial.printf("\n");
+  #ifdef PRINT_SCAN_VALUES
+    Serial.println();
   #endif
   display.display();
   // Serial.printf("Scan took %lld ms\n", millis() - start);
