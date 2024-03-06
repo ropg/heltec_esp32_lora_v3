@@ -142,7 +142,7 @@ void setup() {
   // If we woke up with wiped RTC RAM, or received a message, or we've
   // reached BACKUP_EVERY, we back it up to flash.
   if (count == 1 || gotDownlink == true || count % BACKUP_EVERY == 0) {
-    Serial.println("RTC RAM -> flash.");
+    both.println("RTC RAM -> flash.");
     EEPROM.toNVS();
   }
 
