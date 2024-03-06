@@ -26,7 +26,7 @@ Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shel
 
 ### [RadioLib](https://github.com/jgromes/RadioLib)
 
-This library includes a fork of RadioLib. This is because my fork uses RTC RAM on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the actual newest version of RadioLib instead of including a copy of it.
+This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com.ropg/ESP32_RTC_EEPROM) when compiles on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it.
 
 All well as the radio-relevant examples in this library, all RadioLib examples that should work with an SX1262 should work here. Simply `#include <heltec.h>` and remove any code that creates a `radio` instance, it already exists when you include this library.
 
@@ -49,7 +49,7 @@ The user button marked 'PRG' on the board is handled by another library this one
 
 ##### Using it as the power button
 
-If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec.h`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
+If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec.h>`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
 
 > * _If you use `delay()` in your code, the power off function will not work during that delay. To fix that, simply use **`heltec_delay()`** instead._
 
