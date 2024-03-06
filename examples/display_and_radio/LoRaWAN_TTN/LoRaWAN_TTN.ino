@@ -111,6 +111,7 @@ void setup() {
   both.printf("TX: %s\n", strUp.c_str());
   RADIOLIB(node.sendReceive(strUp, 10, strDown));
   if(_radiolib_status == RADIOLIB_ERR_NONE) {
+    gotDownlink = true;
     both.print("RX: ");
     // print data of the packet (if there are any)
     if(strDown.length() > 0) {
