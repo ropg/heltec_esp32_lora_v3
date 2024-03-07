@@ -6,7 +6,7 @@
 
 ### Introduction
 
-There's this Chinese company named Heltec, and they make a cool little development board that has an Espressif ESP32S3 (which has WiFi and Bluetooth) and an SX1262 863-928 MHz radio on it. It sells under different names on the internet, but internally they call it **[HTIT-WB32LA](images/heltec_esp32_lora_v3_documentation.pdf)**. (They have a 470-510 MHz version also, called HTIT-WB32LAF.) The hardware is cool, the software that comes with it is not so much my taste. There's multiple GitHub repositories, it's initailly unclear what is what, they use some radio stack of unknown origin, code-quality and documentation varies, some examples need tinkering and what could be a cool toy could easily become a very long weekend of frustration before things sort of work.
+There's this Chinese company named Heltec, and they make a cool little development board that has an Espressif ESP32S3 (which has WiFi and Bluetooth), 128x64 pixel OLED display and an SX1262 863-928 MHz radio on it. It sells under different names on the internet, but internally they call it **[HTIT-WB32LA](images/heltec_esp32_lora_v3_documentation.pdf)**. (They have a 470-510 MHz version also, called HTIT-WB32LAF.) The hardware is cool, the software that comes with it is not so much my taste. There's multiple GitHub repositories, it's initailly unclear what is what, they use some radio stack of unknown origin, code-quality and documentation varies, some examples need tinkering and what could be a cool toy could easily become a very long weekend of frustration before things sort of work.
 
 This library allows you to use that time to instead play with this cool board. The examples are tested, and this library assumes that for all things sub-GHz, you want to use the popular RadioLib.
 
@@ -26,7 +26,7 @@ Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shel
 
 ### [RadioLib](https://github.com/jgromes/RadioLib)
 
-This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com.ropg/ESP32_RTC_EEPROM) when compiles on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it.
+This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com.ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
 
 All well as the radio-relevant examples in this library, all RadioLib examples that should work with an SX1262 should work here. Simply `#include <heltec.h>` and remove any code that creates a `radio` instance, it already exists when you include this library.
 
@@ -35,13 +35,13 @@ All well as the radio-relevant examples in this library, all RadioLib examples t
 
 ### [Display](https://github.com/ThingPulse/esp8266-oled-ssd1306)
 
-The tiny OLED display uses the same library that the original library from Heltec uses, except now the examples work so you don't have to figure out how to make things work. It is included inside this library because the Heltec board needs a hardware reset and to make the Arduino `print` functionality work better. (The latter change [submitted](https://github.com/ThingPulse/esp8266-oled-ssd1306/pull/389#issuecomment-1962005989) to the original library also.)
+The tiny OLED display uses the same library that the original library from Heltec uses, except now the examples work so you don't have to figure out how to make things work. It is included inside this library because the Heltec board needs a hardware reset and I adapted some things to make the Arduino `print` functionality work better. (The latter change [submitted](https://github.com/ThingPulse/esp8266-oled-ssd1306/pull/389) to the original library also.)
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
 ##### Printing to both Serial and display: `both.print()`
 
-Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices.
+Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used it many of this library's examples.
 
 ### [Button](https://github.com/poelstra/arduino-multi-button)
 
@@ -57,15 +57,19 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
 
-> * _If you call `heltec_deep_sleep()` without a number in seconds when not using the power button feature, you will need to reset it to turn it back on. Resetting does reinitialize any `RTC_DATA_ATTR` variables however._
+> * _If you call `heltec_deep_sleep()` without a number in seconds when not using the power button feature, you will need to reset it to turn it back on. Note that resetting does reinitialize any `RTC_DATA_ATTR` variables._
 
 ### LED
 
-The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led` that takes the LED brightness in percent.
+The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
 
 ### Battery
 
-The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom. `heltec_vbat()` gives you a float with the battery voltage, `heltec_battery_percent()` provides the estimated percentage full. 
+The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom. `heltec_vbat()` gives you a float with the battery voltage, `heltec_battery_percent()` provides the estimated percentage full.
+
+Note that it takes a single cell (3.7 V) LiPo and that the plus is on the left side when holding the board with the USB-C connector facing up.
+
+![](images/battery-connector.jpg)
 
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
 > * _You can optionally provide the float that `heltec_vbat()` returns to `heltec_battery_percent()` to make sure both are based on the same measurement._
@@ -131,3 +135,7 @@ void loop() {
 For a more meaningful demo, especially if you have two of these boards, check out `LoRa_rx_tx` in the examples.
 
 ![](images/pins.png)
+
+![](images/spectrum_analyzer.jpg)
+
+The [spectrum analyzer example](examples/display_and_radio/spectrum_analyzer/spectrum_analyzer.ino).
