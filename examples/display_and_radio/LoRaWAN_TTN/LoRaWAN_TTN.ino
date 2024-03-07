@@ -41,6 +41,14 @@
   https://github.com/jgromes/RadioLib/wiki/LoRaWAN
 */
 
+  // JoinEUI - previous versions of LoRaWAN called this AppEUI
+  // for development purposes you can use all zeros - see wiki for details
+  uint64_t joinEUI = 0x0000000000000000;
+
+  // DevEUI - The device's Extended Unique Identifier
+  // TTN will generate one for you
+  uint64_t devEUI =  0x0000000000000000;
+
   // encryption keys used to secure the communication
   // TTN will generate them for you
   // see wiki for details on copying & pasting them
