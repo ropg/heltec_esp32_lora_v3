@@ -40,7 +40,6 @@ const String loremipsum = "Lorem ipsum dolor sit ämet, "
 
 void setup() {
   display.init();
-  display.flipScreenVertically();
   display.setContrast(255);
   display.setTextAlignment(TEXT_ALIGN_LEFT);
   display.setFont(ArialMT_Plain_16);

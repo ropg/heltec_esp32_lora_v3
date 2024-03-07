@@ -145,8 +145,6 @@ void setup() {
   // Initialising the UI will init the display too.
   ui.init();
 
-  display.flipScreenVertically();
-
 }
 
 

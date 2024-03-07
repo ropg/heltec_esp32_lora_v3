@@ -158,8 +158,6 @@ void setup() {
   // Initialising the UI will init the display too.
   ui.init();
 
-  display.flipScreenVertically();
-
   unsigned long secsSinceStart = millis();
   // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
   const unsigned long seventyYears = 2208988800UL;

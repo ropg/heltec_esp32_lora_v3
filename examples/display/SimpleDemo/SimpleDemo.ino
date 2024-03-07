@@ -54,7 +54,6 @@ void setup() {
   // Initialising the UI will init the display too.
   display.init();
 
-  display.flipScreenVertically();
   display.setFont(ArialMT_Plain_10);
 
 }

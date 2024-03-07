@@ -59,7 +59,6 @@ void setup() {
   }
 
   display.init();
-  display.flipScreenVertically();
   display.setContrast(255);
 
   ArduinoOTA.begin();
