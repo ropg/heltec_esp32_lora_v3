@@ -216,4 +216,5 @@ For a more meaningful demo, especially if you have two of these boards, [check o
 
 &nbsp;
 
-***If you read this far, would you please star this repository?*** *Not so much for my ego, but it helps other people find it. Thanks!*
+***If you read this far, would you please star this repository?***
+*(Not so much for my ego, but it helps other people find it. Thanks!)*
