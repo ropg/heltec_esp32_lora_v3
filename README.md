@@ -6,7 +6,7 @@
 
 ### Introduction
 
-There's this Chinese company named Heltec, and they make a cool little development board that has an Espressif ESP32S3 (which has WiFi and Bluetooth), 128x64 pixel OLED display and an SX1262 863-928 MHz radio on it. It sells under different names on the internet, but internally they call it **[HTIT-WB32LA](images/heltec_esp32_lora_v3_documentation.pdf)**. (They have a 470-510 MHz version also, called HTIT-WB32LAF.) The hardware is cool, the software that comes with it is not so much my taste. There's multiple GitHub repositories, it's initailly unclear what is what, they use some radio stack of unknown origin, code-quality and documentation varies, some examples need tinkering and what could be a cool toy could easily become a very long weekend of frustration before things sort of work.
+There's this Chinese company named Heltec, and they make a cool little development board that has an Espressif ESP32S3 (which has WiFi and Bluetooth), a 128x64 pixel OLED display and an SX1262 863-928 MHz radio on it. It sells under different names on the internet, but internally they call it **[HTIT-WB32LA](images/heltec_esp32_lora_v3_documentation.pdf)**. (They have a 470-510 MHz version also, called HTIT-WB32LAF.) The hardware is cool, the software that comes with it is not so much my taste. There's multiple GitHub repositories, it's initailly unclear what is what, they use some radio stack of unknown origin, code-quality and documentation varies, some examples need tinkering and what could be a cool toy could easily become a very long weekend of frustration before things sort of work.
 
 This library allows you to use that time to instead play with this cool board. The examples are tested, and this library assumes that for all things sub-GHz, you want to use the popular RadioLib.
 
@@ -16,13 +16,35 @@ This library allows you to use that time to instead play with this cool board. T
 
 ### Setting up
 
-Make sure your Arduino IDE knows about ESP-32 boards by putting the following URL in the following URL under "Additional board manager URLs" in the Arduino IDE settings:
+Make sure your Arduino IDE knows about ESP-32 boards by putting the following URL under "Additional board manager URLs" in the Arduino IDE settings:
 
 ```
 https://espressif.github.io/arduino-esp32/package_esp32_index.json
 ```
 
 Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shell (V3) / Wireless stick lite (V3)*".
+
+&nbsp;
+
+### Getting started
+
+In your sketch, `#include <heltec.h>`. Then in your `setup()`, put `heltec_setup()`. This will initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provide the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+
+```cpp
+#include <heltec.h>
+
+void setup() {
+  heltec_setup();
+
+  [...]
+}
+
+void loop() {
+  heltec_loop();
+
+  [...]
+}
+```
 
 &nbsp;
 
@@ -188,3 +210,10 @@ For a more meaningful demo, especially if you have two of these boards, check ou
 ### [Spectrum analyzer example](examples/display_and_radio/spectrum_analyzer/spectrum_analyzer.ino)
 
 ![](images/spectrum_analyzer.jpg)
+
+
+&nbsp;
+
+&nbsp;
+
+( ***If you read this far, would you please star this repository?*** *Not so much for my ego, but it helps other people find it. Thanks! )*
