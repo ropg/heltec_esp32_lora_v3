@@ -24,14 +24,49 @@ https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
 Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shell (V3) / Wireless stick lite (V3)*".
 
-### [RadioLib](https://github.com/jgromes/RadioLib)
+&nbsp;
 
-This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com.ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to make a more generic mechanism for retaining state, as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
+### [RadioLib](https://jgromes.github.io/RadioLib/)
 
-All well as the radio-relevant examples in this library, all RadioLib examples that should work with an SX1262 should work here. Simply `#include <heltec.h>` and remove any code that creates a `radio` instance, it already exists when you include this library.
+This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com.ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to have a more generic mechanism allowing for the retention of state information and as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
+
+Next to the radio examples in this library, all [RadioLib examples](https://github.com/jgromes/RadioLib/tree/master/examples) that work with an SX1262 work here. Simply `#include <heltec.h>` instead of RadioLib and remove any code that creates a `radio` instance, it already exists when you include this library.
 
 > * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` and much of their own software as DIO0. The SX1262 IO pins start at DIO1._
 > * _If you place `#define HELTEC_NO_RADIOLIB` before `#include <heltec.h>`, RadioLib will not be included and this library won't create a radio object. Handy if you are not using the radio and need the space in flash for something else or if you want to use another radio library or so._
+
+&nbsp;
+
+##### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
+
+This library provides convenience macros when calling RadioLib functions. It can be used for those functions that return a status code. When your code calls
+
+```cpp
+RADIOLIB_OR_HALT(radio.setFrequency(866.3));
+```
+this gets translated into
+
+```cpp
+  _radiolib_status = radio.setFrequency(866.3);
+  Serial.printf("[RadioLib] %s returned %i (%s)\n",
+                "radio.setFrequency(866.3)",
+                _radiolib_status,
+                radiolib_result_string(_radiolib_status).c_str());
+  if (_radiolib_status != RADIOLIB_ERR_NONE) {
+    Serial.println("[RadioLib] Halted");
+    while (true) {
+        heltec_loop();
+    }
+  }
+```
+
+In other words, this saves a whole lot of typing if what you want is for RadioLib functions to be called and serial debug output to be generated. Calling `RADIOLIB` instead of `RADIOLIB_OR_HALT` does the same thing without the halting. 
+
+> * _The `heltec_loop()` part in `RADIOLIB_OR_HALT` makes sure that if you have set the `PRG` button to be the power button, it still works when execution is halted._
+> * _`_radiolib_status` is an integer that the library provides and that your code can check afterwards to see what happened._
+> * _`_radiolib_result_string()` returns a textual representation (e.g. `CHIP_NOT_FOUND`) for a few of the most common errors or a URL to look up the others._
+
+&nbsp;
 
 ### [Display](https://github.com/ThingPulse/esp8266-oled-ssd1306)
 
@@ -43,6 +78,8 @@ There's the primary display library and there's an additinal UI library that all
 
 Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used it many of this library's examples.
 
+&nbsp;
+
 ### [Button](https://github.com/poelstra/arduino-multi-button)
 
 The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in the`loop()` of your sketch if you use it.
@@ -53,15 +90,21 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 > * _If you use `delay()` in your code, the power off function will not work during that delay. To fix that, simply use **`heltec_delay()`** instead._
 
+&nbsp;
+
 ### [Deep Sleep](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/)
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
 
 > * _If you call `heltec_deep_sleep()` without a number in seconds when not using the power button feature, you will need to reset it to turn it back on. Note that resetting does reinitialize any `RTC_DATA_ATTR` variables._
 
+&nbsp;
+
 ### LED
 
 The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
+
+&nbsp;
 
 ### Battery
 
@@ -74,17 +117,19 @@ Note that it takes a single cell (3.7 V) LiPo and that the plus is on the left s
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
 > * _You can optionally provide the float that `heltec_vbat()` returns to `heltec_battery_percent()` to make sure both are based on the same measurement._
 > * _The [charging IC](images/tp4054.pdf) used will charge the battery to ~4.2V, then hold the voltage there until charge current is 1/10 the set current (i.e. 50 mA) and then stop and let it discharge to 4.05V (about 90%) and then charge it again, so this is expected._
-> * _The orange charging LED, on but very dim is no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃, so nothing too bad can happen, just so you know._
+The orange charging LED, on but very dim is no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃, so nothing too bad can happen, just so you know.
 
 The battery percentage estimate in this library is based on a real LiPo discharge curve.
 
 ![](/images/battery_curve.png)
 
-> * _The library contains all the tools to measure your own curve and use it instead, see [`heltec.h`](src/heltec.h) for details._
+The library contains all the tools to measure your own curve and use it instead, see [`heltec.h`](src/heltec.h) for details.
+
+&nbsp;
 
 ### Ve - external power
 
-There's two pins marked 'Ve', connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
+There's two pins marked 'Ve', that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
 
 &nbsp;
 
@@ -130,12 +175,16 @@ void loop() {
 }
 ```
 
+For a more meaningful demo, especially if you have two of these boards, check out `LoRa_rx_tx` in the examples.
+
 &nbsp;
 
-For a more meaningful demo, especially if you have two of these boards, check out `LoRa_rx_tx` in the examples.
+### Pinout
 
 ![](images/pins.png)
 
-![](images/spectrum_analyzer.jpg)
+&nbsp;
 
-The [spectrum analyzer example](examples/display_and_radio/spectrum_analyzer/spectrum_analyzer.ino).
+### [Spectrum analyzer example](examples/display_and_radio/spectrum_analyzer/spectrum_analyzer.ino)
+
+![](images/spectrum_analyzer.jpg)
