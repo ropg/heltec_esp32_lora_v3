@@ -28,7 +28,7 @@ Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shel
 
 ### Getting started
 
-In your sketch, `#include <heltec.h>`. Then in your `setup()`, put `heltec_setup()`. This will initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provide the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+In your sketch, `#include <heltec.h>`. Then in your `setup()`, put `heltec_setup()`. This will initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
 #include <heltec.h>
@@ -197,7 +197,7 @@ void loop() {
 }
 ```
 
-For a more meaningful demo, especially if you have two of these boards, check out `LoRa_rx_tx` in the examples.
+For a more meaningful demo, especially if you have two of these boards, [check out `LoRa_rx_tx`](examples/display_and_radio/LoRa_rx_tx/LoRa_rx_tx.ino) in the examples. The [`LoRaWAN_TTN` example](examples/display_and_radio/LoRaWAN_TTN/LoRaWAN_TTN.ino) works, uses [The Things Network](https://www.thethingsnetwork.org/) and goes to deep sleep between sends.
 
 &nbsp;
 
@@ -216,4 +216,4 @@ For a more meaningful demo, especially if you have two of these boards, check ou
 
 &nbsp;
 
-( ***If you read this far, would you please star this repository?*** *Not so much for my ego, but it helps other people find it. Thanks! )*
+***If you read this far, would you please star this repository?*** *Not so much for my ego, but it helps other people find it. Thanks!*
