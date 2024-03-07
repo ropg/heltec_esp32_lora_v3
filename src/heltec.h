@@ -11,22 +11,6 @@
 #ifndef heltec_h
 #define heltec_h
 
-#ifndef HELTEC_NO_RADIOLIB
-  #include "RadioLib/RadioLib.h"
-  // make sure the power off button works when using RADIOLIB_OR_HALT
-  #define RADIOLIB_DO_DURING_HALT heltec_delay(10)
-  #include "RadioLib_convenience.h"
-#endif
-
-#include "display/SSD1306Wire.h"
-#include "display/OLEDDisplayUi.h"
-
-#include "PinButton.h"
-
-// Heltec's pins_arduino.h calls the pin DIO0, but what they hooked up 
-// is actually called DIO1 on SX1262 (!)
-#define DIO1      DIO0
-
 #define BUTTON    GPIO_NUM_0
 
 #define LED_PIN   35
@@ -38,6 +22,25 @@
 
 #define VBAT_CTRL 37
 #define VBAT_ADC  1
+#define SS        8
+#define MOSI      10
+#define MISO      11
+#define SCK       9
+#define DIO1      14
+#define RST_LoRa  12
+#define BUSY_LoRa 13
+
+#ifndef HELTEC_NO_RADIOLIB
+  #include "RadioLib/RadioLib.h"
+  // make sure the power off button works when using RADIOLIB_OR_HALT
+  #define RADIOLIB_DO_DURING_HALT heltec_delay(10)
+  #include "RadioLib_convenience.h"
+#endif
+
+#include "display/SSD1306Wire.h"
+#include "display/OLEDDisplayUi.h"
+
+#include "PinButton.h"
 
 #ifndef HELTEC_NO_INSTANCES
   #ifndef HELTEC_NO_RADIOLIB
