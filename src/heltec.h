@@ -39,8 +39,10 @@
 #define VBAT_CTRL 37
 #define VBAT_ADC  1
 
-#ifndef HELTEC_NO_RADIOLIB
-  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+#ifndef HELTEC_NO_INSTANCES
+  #ifndef HELTEC_NO_RADIOLIB
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+  #endif
 #endif
 
 // Don't you just hate it when battery percentages are wrong?
@@ -89,11 +91,13 @@ class PrintSplitter : public Print {
     Print &b;
 };
 
-SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, GEOMETRY_128_64);
+#ifndef HELTEC_NO_INSTANCES
+  SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, GEOMETRY_128_64);
 
-PrintSplitter both(Serial, display);
+  PrintSplitter both(Serial, display);
 
-PinButton button(BUTTON);
+  PinButton button(BUTTON);
+#endif
 
 /**
  * @brief Controls the LED brightness based on the given percentage.
@@ -230,8 +234,10 @@ bool heltec_wakeup_was_timer() {
  */
 void heltec_setup() {
   Serial.begin(115200);
-  display.init();
-  display.flipScreenVertically();
+  #ifndef HELTEC_NO_INSTANCES
+    display.init();
+    display.flipScreenVertically();
+  #endif
 }
 
 /**
