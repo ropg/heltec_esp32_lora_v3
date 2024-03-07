@@ -48,7 +48,7 @@ void loop() {
 
 &nbsp;
 
-> *If you* `#define HELTEC_NO_INSTANCES` *before* `#include <heltec.h>`, *you get no instances of* `radio`, `display`, `button`, or `both`, *so you just set everything up manually.* 
+> *If you* `#define HELTEC_NO_INSTANCES` *before* `#include <heltec.h>`, *you get no instances of* `radio`, `display`, `button`, or `both`, *so you can just set everything up manually.* 
 
 &nbsp;
 
@@ -102,7 +102,7 @@ There's the primary display library and there's an additinal UI library that all
 
 ##### Printing to both Serial and display: `both.print()`
 
-Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used it many of this library's examples.
+Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used in many of this library's examples.
 
 &nbsp;
 
