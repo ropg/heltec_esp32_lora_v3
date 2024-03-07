@@ -11,24 +11,31 @@
 #ifndef heltec_h
 #define heltec_h
 
+// 'PRG' Button
 #define BUTTON    GPIO_NUM_0
-
+// LED pin & PWM parameters
 #define LED_PIN   35
 #define LED_FREQ  5000
 #define LED_CHAN  0
 #define LED_RES   8
-
+// External power control
 #define VEXT      36
-
+// Battery voltage measurement
 #define VBAT_CTRL 37
 #define VBAT_ADC  1
+// SPI pins
 #define SS        8
 #define MOSI      10
 #define MISO      11
 #define SCK       9
+// Radio pins
 #define DIO1      14
 #define RST_LoRa  12
 #define BUSY_LoRa 13
+// Display pins
+#define SDA_OLED  17
+#define SCL_OLED  18
+#define RST_OLED  21
 
 #ifndef HELTEC_NO_RADIOLIB
   #include "RadioLib/RadioLib.h"
@@ -95,7 +102,12 @@ class PrintSplitter : public Print {
 };
 
 #ifndef HELTEC_NO_INSTANCES
-  SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, GEOMETRY_128_64);
+  #ifdef HELTEC_WIRELESS_STICK
+    #define DISPLAY_GEOMETRY GEOMETRY_64_32
+  #else
+    #define DISPLAY_GEOMETRY GEOMETRY_128_64
+  #endif
+  SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, DISPLAY_GEOMETRY);
 
   PrintSplitter both(Serial, display);
 
