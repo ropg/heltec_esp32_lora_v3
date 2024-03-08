@@ -14,28 +14,28 @@
 // 'PRG' Button
 #define BUTTON    GPIO_NUM_0
 // LED pin & PWM parameters
-#define LED_PIN   35
+#define LED_PIN   GPIO_NUM_35
 #define LED_FREQ  5000
 #define LED_CHAN  0
 #define LED_RES   8
 // External power control
-#define VEXT      36
+#define VEXT      GPIO_NUM_36
 // Battery voltage measurement
-#define VBAT_CTRL 37
-#define VBAT_ADC  1
+#define VBAT_CTRL GPIO_NUM_37
+#define VBAT_ADC  GPIO_NUM_1
 // SPI pins
-#define SS        8
-#define MOSI      10
-#define MISO      11
-#define SCK       9
+#define SS        GPIO_NUM_8
+#define MOSI      GPIO_NUM_10
+#define MISO      GPIO_NUM_11
+#define SCK       GPIO_NUM_9
 // Radio pins
-#define DIO1      14
-#define RST_LoRa  12
-#define BUSY_LoRa 13
+#define DIO1      GPIO_NUM_14
+#define RST_LoRa  GPIO_NUM_12
+#define BUSY_LoRa GPIO_NUM_13
 // Display pins
-#define SDA_OLED  17
-#define SCL_OLED  18
-#define RST_OLED  21
+#define SDA_OLED  GPIO_NUM_17
+#define SCL_OLED  GPIO_NUM_18
+#define RST_OLED  GPIO_NUM_21
 
 #ifndef HELTEC_NO_RADIOLIB
   #include "RadioLib/RadioLib.h"
@@ -130,6 +130,7 @@ void heltec_led(int percent) {
     ledcAttachPin(LED_PIN, LED_CHAN);
     ledcWrite(LED_CHAN, percent * 255 / 100);
   } else {
+    ledcDetachPin(LED_PIN);
     pinMode(LED_PIN, INPUT);
   }
 }
@@ -149,7 +150,6 @@ void heltec_ve(bool state) {
     digitalWrite(VEXT, LOW);
   } else {
     // pulled up, no need to drive it
-    ledcDetachPin(LED_PIN);
     pinMode(VEXT, INPUT);
   }
 }
@@ -198,9 +198,13 @@ void heltec_deep_sleep(int seconds = 0) {
     // 'false' here is to not have a warm start, we re-init the after sleep.
     radio.sleep(false);
   #endif
+  // Turn off external power
   heltec_ve(false);
+  // Turn off LED
   heltec_led(0);
-
+  // Set all pins to input to save power
+  pinMode(VBAT_CTRL, INPUT);
+  pinMode(VBAT_ADC, INPUT);
   pinMode(DIO1, INPUT);
   pinMode(RST_LoRa, INPUT);
   pinMode(BUSY_LoRa, INPUT);
@@ -211,16 +215,15 @@ void heltec_deep_sleep(int seconds = 0) {
   pinMode(SDA_OLED, INPUT);
   pinMode(SCL_OLED, INPUT);
   pinMode(RST_OLED, INPUT);
-
+  // Set button wakeup if applicable
   #ifdef HELTEC_POWER_BUTTON
-    // set to wake up on button press
     esp_sleep_enable_ext0_wakeup(BUTTON, LOW);
   #endif
+  // Set timer wakeup if applicable
   if (seconds > 0) {
-    // set to wake up after a certain time
     esp_sleep_enable_timer_wakeup(seconds * 1000000);
   }
-  // and off to bed
+  // and off to bed we go
   esp_deep_sleep_start();
 }
 
