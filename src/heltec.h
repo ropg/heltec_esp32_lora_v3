@@ -186,6 +186,18 @@ void heltec_deep_sleep(int seconds = 0) {
   display.displayOff();
   heltec_ve(false);
   heltec_led(0);
+
+  pinMode(DIO1, INPUT);
+  pinMode(RST_LoRa, INPUT);
+  pinMode(BUSY_LoRa, INPUT);
+  pinMode(SS, INPUT);
+  pinMode(MISO, INPUT);
+  pinMode(MOSI, INPUT);
+  pinMode(SCK, INPUT);
+  pinMode(SDA_OLED, INPUT);
+  pinMode(SCL_OLED, INPUT);
+  pinMode(RST_OLED, INPUT);
+
   #ifdef HELTEC_POWER_BUTTON
     // set to wake up on button press
     esp_sleep_enable_ext0_wakeup(BUTTON, LOW);
