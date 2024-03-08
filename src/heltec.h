@@ -49,7 +49,7 @@
 
 #include "PinButton.h"
 
-#ifndef HELTEC_NO_INSTANCES
+#ifndef HELTEC_NO_RADIO_INSTANCE
   #ifndef HELTEC_NO_RADIOLIB
     SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
   #endif
@@ -101,18 +101,20 @@ class PrintSplitter : public Print {
     Print &b;
 };
 
-#ifndef HELTEC_NO_INSTANCES
+#ifndef HELTEC_NO_DISPLAY_INSTANCE
   #ifdef HELTEC_WIRELESS_STICK
     #define DISPLAY_GEOMETRY GEOMETRY_64_32
   #else
     #define DISPLAY_GEOMETRY GEOMETRY_128_64
   #endif
   SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, DISPLAY_GEOMETRY);
-
-  PrintSplitter both(Serial, display);
-
-  PinButton button(BUTTON);
 #endif
+
+#ifndef HELTEC_NO_DISPLAY_INSTANCE
+  PrintSplitter both(Serial, display);
+#endif
+
+PinButton button(BUTTON);
 
 /**
  * @brief Controls the LED brightness based on the given percentage.
@@ -185,7 +187,17 @@ void heltec_deep_sleep(int seconds = 0) {
   #ifdef WiFi_h
     WiFi.disconnect(true);
   #endif
-  display.displayOff();
+  #ifndef HELTEC_NO_DISPLAY_INSTANCE
+    display.displayOff();
+  #endif
+  #ifndef HELTEC_NO_RADIO_INSTANCE
+    // It seems to make no sense to do a .begin() here, but in case the radio is
+    // not interacted with at all before sleep, it will not respond to just
+    // .sleep() and then consumes 800 µA more than it should in deep sleep.
+    radio.begin();
+    // 'false' here is to not have a warm start, we re-init the after sleep.
+    radio.sleep(false);
+  #endif
   heltec_ve(false);
   heltec_led(0);
 
@@ -265,7 +277,7 @@ bool heltec_wakeup_was_timer() {
  */
 void heltec_setup() {
   Serial.begin(115200);
-  #ifndef HELTEC_NO_INSTANCES
+  #ifndef HELTEC_NO_DISPLAY_INSTANCE
     display.init();
     display.flipScreenVertically();
   #endif

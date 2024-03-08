@@ -48,7 +48,7 @@ void loop() {
 
 &nbsp;
 
-> *If you* `#define HELTEC_NO_INSTANCES` *before* `#include <heltec.h>`, *you get no instances of* `radio`, `display`, `button`, or `both`, *so you can just set everything up manually.* 
+If you `#define HELTEC_NO_RADIO_INSTANCE` and/or `#define HELTEC_NO_DISPLAY_INSTANCE` before `#include <heltec.h>`, you get no instances of `radio` and/or `display`, so you can set these up manually. Note that the library then also doesn't turn things off at sleep, etc.
 
 &nbsp;
 
