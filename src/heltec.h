@@ -154,10 +154,11 @@ void heltec_ve(bool state) {
 
 /**
  * @brief Measures the battery voltage.
- * 
- * This function measures the battery voltage by controlling the VBAT_CTRL pin and reading the analog value
- * from the VBAT_ADC pin. The measured voltage is then converted to a float value and returned.
- * 
+ *
+ * This function measures the battery voltage by controlling the VBAT_CTRL pin
+ * and reading the analog value from the VBAT_ADC pin. The measured voltage is
+ * then converted to a float value and returned.
+ *
  * @return The battery voltage in volts.
  */
 float heltec_vbat() {
@@ -172,11 +173,12 @@ float heltec_vbat() {
 
 /**
  * @brief Puts the device into deep sleep mode.
- * 
- * This function prepares the device for deep sleep mode by disconnecting from WiFi, turning off the display,
- * disabling external power, and turning off the LED. It can also be configured to wake up after a certain
- * number of seconds using the optional parameter.
- * 
+ *
+ * This function prepares the device for deep sleep mode by disconnecting from
+ * WiFi, turning off the display, disabling external power, and turning off the
+ * LED. It can also be configured to wake up after a certain number of seconds
+ * using the optional parameter.
+ *
  * @param seconds The number of seconds to sleep before waking up (default = 0).
  */
 void heltec_deep_sleep(int seconds = 0) {
@@ -211,12 +213,14 @@ void heltec_deep_sleep(int seconds = 0) {
 }
 
 /**
- * @brief Calculates the battery percentage based on the measured battery voltage.
- * 
- * This function calculates the battery percentage based on the measured battery voltage.
- * If the battery voltage is not provided as a parameter, it will be measured using the heltec_vbat() function.
- * The battery percentage is then returned as an integer value.
- * 
+ * @brief Calculates the battery percentage based on the measured battery
+ * voltage.
+ *
+ * This function calculates the battery percentage based on the measured battery
+ * voltage. If the battery voltage is not provided as a parameter, it will be
+ * measured using the heltec_vbat() function. The battery percentage is then
+ * returned as an integer value.
+ *
  * @param vbat The battery voltage in volts (default = -1).
  * @return The battery percentage (0-100).
  */
