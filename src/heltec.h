@@ -1,7 +1,7 @@
 /**
  * @file heltec.h
  * @brief Header file for the Heltec library.
- * 
+ *
  * This file contains the definitions and declarations for the Heltec library.
  * The library provides functions for controlling the Heltec ESP32 LoRa V3
  * board, including LED brightness control, voltage measurement, deep sleep
@@ -56,13 +56,13 @@
 #endif
 
 // Don't you just hate it when battery percentages are wrong?
-// 
-// I measured the actual voltage drop on a LiPo battery and these 
-// are the average voltages, expressed in 1/256'th steps between 
-// min_voltage and max_voltage for each 1/100 of the time it took to
-// discharge the battery. The code for a telnet server that outputs
-// battery voltage as CSV data is in examples, and a python script
-// that outputs the constants below is in src/tools.
+//
+// I measured the actual voltage drop on a LiPo battery and these are the
+// average voltages, expressed in 1/256'th steps between min_voltage and
+// max_voltage for each 1/100 of the time it took to discharge the battery. The
+// code for a telnet server that outputs battery voltage as CSV data is in
+// examples, and a python script that outputs the constants below is in
+// src/tools.
 const float min_voltage = 3.04;
 const float max_voltage = 4.26;
 const uint8_t scaled_voltage[100] = {
@@ -80,10 +80,12 @@ const uint8_t scaled_voltage[100] = {
 
 /**
  * @class PrintSplitter
- * @brief A class that splits the output of the Print class to two different Print objects.
- * 
- * The PrintSplitter class is used to split the output of the Print class to two different Print objects.
- * It overrides the write() function to write the data to both Print objects.
+ * @brief A class that splits the output of the Print class to two different
+ *        Print objects.
+ *
+ * The PrintSplitter class is used to split the output of the Print class to two
+ * different Print objects. It overrides the write() function to write the data
+ * to both Print objects.
  */
 class PrintSplitter : public Print {
   public:
@@ -108,20 +110,20 @@ class PrintSplitter : public Print {
     #define DISPLAY_GEOMETRY GEOMETRY_128_64
   #endif
   SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, DISPLAY_GEOMETRY);
-#endif
-
-#ifndef HELTEC_NO_DISPLAY_INSTANCE
   PrintSplitter both(Serial, display);
+#else
+  Print &both = Serial;
 #endif
 
 PinButton button(BUTTON);
 
 /**
  * @brief Controls the LED brightness based on the given percentage.
- * 
- * This function sets up the LED channel, frequency, and resolution, and then adjusts the LED brightness
- * based on the given percentage. If the percentage is 0 or less, the LED pin is set as an input pin.
- * 
+ *
+ * This function sets up the LED channel, frequency, and resolution, and then
+ * adjusts the LED brightness based on the given percentage. If the percentage
+ * is 0 or less, the LED pin is set as an input pin.
+ *
  * @param percent The brightness percentage of the LED (0-100).
  */
 void heltec_led(int percent) {
@@ -137,11 +139,12 @@ void heltec_led(int percent) {
 
 /**
  * @brief Controls the VEXT pin to enable or disable external power.
- * 
- * This function sets the VEXT pin as an output pin and sets its state based on the given parameter.
- * If the state is true, the VEXT pin is set to LOW to enable external power. If the state is false,
- * the VEXT pin is set to INPUT to disable external power.
- * 
+ *
+ * This function sets the VEXT pin as an output pin and sets its state based on
+ * the given parameter. If the state is true, the VEXT pin is set to LOW to
+ * enable external power. If the state is false, the VEXT pin is set to INPUT to
+ * disable external power.
+ *
  * @param state The state of the VEXT pin (true = enable, false = disable).
  */
 void heltec_ve(bool state) {
@@ -274,9 +277,9 @@ bool heltec_wakeup_was_timer() {
 
 /**
  * @brief Initializes the Heltec library.
- * 
- * This function initializes the Heltec library by setting up
- * Serial port and display.
+ *
+ * This function should be the first thing in setup() of your sketch. It
+ * initializes the Heltec library by setting up serial port and display.
  */
 void heltec_setup() {
   Serial.begin(115200);
@@ -288,9 +291,9 @@ void heltec_setup() {
 
 /**
  * @brief The main loop function for the Heltec library.
- * 
- * This function should be called in the main loop of the Arduino sketch.
- * It updates the state of the power button and implements long-press power off if used.
+ *
+ * This function should be called in loop() of the Arduino sketch. It updates
+ * the state of the power button and implements long-press power off if used.
  */
 void heltec_loop() {
   button.update();
@@ -315,12 +318,13 @@ void heltec_loop() {
 }
 
 /**
- * @brief Delays the execution of the program for the specified number of milliseconds.
- * 
- * This function delays the execution of the program for the specified number of milliseconds.
- * During the delay, it also calls the heltec_loop() function to allow for the power off
- * button to be checked.
- * 
+ * @brief Delays the execution of the program for the specified number of
+ *        milliseconds.
+ *
+ * This function delays the execution of the program for the specified number of
+ * milliseconds. During the delay, it also calls the heltec_loop() function to
+ * allow for the power off button to be checked.
+ *
  * @param ms The number of milliseconds to delay.
  */
 void heltec_delay(int ms) {
