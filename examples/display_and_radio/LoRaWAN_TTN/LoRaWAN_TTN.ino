@@ -64,7 +64,7 @@ uint8_t appKey[] = { 0x--, 0x--, 0x--, 0x--, 0x--, 0x--, 0x--, 0x--,
 // Create a backup copy of the RTC RAM to flash every so many times
 #define BACKUP_EVERY 100
 
-// The LoRaWAN specification provides a Port field (FPort) to distinguish
+// The LoRaWAN specification provides a port field (FPort) to distinguish
 // between different types of messages on the receiving end. It's one byte, but
 // FPort 0 is reserved for LoRaWAN-internal MAC messages, and values 224 through
 // 255 (0xE0…0xFF) are reserved for future standardized application extensions,
@@ -146,7 +146,7 @@ void setup() {
   }
 
   // If we're still here, it means we joined, and we can send something
-  String strUp = "Hello! " + String(count++);
+  String strUp = "Hello! " + String(count);
   String strDown;
   both.printf("TX: %s\n", strUp.c_str());
   RADIOLIB(node.sendReceive(strUp, FPORT, strDown));
@@ -158,16 +158,16 @@ void setup() {
   } else if(_radiolib_status == RADIOLIB_ERR_RX_TIMEOUT) {
 
     // Don't be deceived by this being called 'ERR_RX_TIMEOUT', It's not an
-    // error, not receiving anything is what happens most of the time in
-    // LoRaWAN. So we do nothing special here.
+    // error; not receiving anything in response to sending a packet is what
+    // happens most of the time in LoRaWAN. So we do nothing special here.
 
   } else {
 
     // Print error 
-    both.printf("TX failed: %i\n  (%s)\n",
-                _radiolib_status,
-                radiolib_result_string(_radiolib_status).c_str()
-               );
+    display.printf("TX failed: %i\n  (%s)\n",
+                   _radiolib_status,
+                   radiolib_result_string(_radiolib_status).c_str()
+                  );
   }
 
   goToSleep();    // Does not return, program starts over next round
@@ -175,8 +175,10 @@ void setup() {
 }
 
 void loop() {
+
   // This is never called. There is no repetition: we always go back to deep
   // sleep one way or the other at the end of setup()
+
 }
 
 
