@@ -74,10 +74,14 @@ this gets translated into
 
 ```cpp
   _radiolib_status = radio.setFrequency(866.3);
-  Serial.printf("[RadioLib] %s returned %i (%s)\n",
-                "radio.setFrequency(866.3)",
-                _radiolib_status,
-                radiolib_result_string(_radiolib_status).c_str());
+  _radiolib_status = action;
+  Serial.print("[RadioLib] ");
+  Serial.print("radio.setFrequency(866.3)");
+  Serial.print(" returned ");
+  Serial.print(_radiolib_status);
+  Serial.print(" (");
+  Serial.print(radiolib_result_string(_radiolib_status));
+  Serial.println(")");
   if (_radiolib_status != RADIOLIB_ERR_NONE) {
     Serial.println("[RadioLib] Halted");
     while (true) {
@@ -145,7 +149,7 @@ Note that it takes a single cell (3.7 V) LiPo and that the plus is on the left s
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
 > * _You can optionally provide the float that `heltec_vbat()` returns to `heltec_battery_percent()` to make sure both are based on the same measurement._
 > * _The [charging IC](images/tp4054.pdf) used will charge the battery to ~4.2V, then hold the voltage there until charge current is 1/10 the set current (i.e. 50 mA) and then stop and let it discharge to 4.05V (about 90%) and then charge it again, so this is expected._
-The orange charging LED, on but very dim is no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃, so nothing too bad can happen, just so you know.
+> * _The orange charging LED, on but very dim is no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃ so nothing too bad can happen, just so you know._
 
 The battery percentage estimate in this library is based on a real LiPo discharge curve.
 
@@ -157,7 +161,7 @@ The library contains all the tools to measure your own curve and use it instead,
 
 ### Ve - external power
 
-There's two pins marked 'Ve', that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
+There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
 
 &nbsp;
 
