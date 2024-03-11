@@ -22,7 +22,7 @@ There is some level of general confusion when it comes to Heltec devices. They m
 
 > There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the litlle OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
 
-This library is unlikely to work as is with any other devices, made by heltec or others. You maye still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
+This library is unlikely to work as is with any other devices, made by heltec or others. You may still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
 
 For purposes of clarity, I might speak about "the regular board" and "the stick" to mean the two supported devices.
 
