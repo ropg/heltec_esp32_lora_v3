@@ -6,6 +6,9 @@
  * 
 */
 
+// This example doesn't work as is on the Heltec Wireless Stick
+
+#define HELTEC_POWER_BUTTON
 #include <heltec.h>
 
 /**
@@ -126,8 +129,7 @@ OverlayCallback overlays[] = { clockOverlay };
 int overlaysCount = 1;
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println();
+  heltec_setup();
 
   // The ESP is capable of rendering 60fps in 80Mhz mode
   // but that won't give you much time for anything else
@@ -169,12 +171,13 @@ void setup() {
 
 
 void loop() {
+  heltec_loop();
   int remainingTimeBudget = ui.update();
 
   if (remainingTimeBudget > 0) {
     // You can do some work here
     // Don't do stuff if you are below your
     // time budget.
-    delay(remainingTimeBudget);
+    heltec_delay(remainingTimeBudget);
   }
 }

@@ -40,12 +40,17 @@
 #ifndef HELTEC_NO_RADIOLIB
   #include "RadioLib/RadioLib.h"
   // make sure the power off button works when using RADIOLIB_OR_HALT
+  // (See RadioLib_convenience.h)
   #define RADIOLIB_DO_DURING_HALT heltec_delay(10)
   #include "RadioLib_convenience.h"
 #endif
 
-#include "display/SSD1306Wire.h"
-#include "display/OLEDDisplayUi.h"
+#ifdef HELTEC_NO_DISPLAY
+  #define HELTEC_NO_DISPLAY_INSTANCE
+#else
+  #include "display/SSD1306Wire.h"
+  #include "display/OLEDDisplayUi.h"
+#endif
 
 #include "HotButton.h"
 
@@ -285,7 +290,13 @@ bool heltec_wakeup_was_timer() {
 void heltec_setup() {
   Serial.begin(115200);
   #ifndef HELTEC_NO_DISPLAY_INSTANCE
+    #ifdef HELTEC_WIRELESS_STICK
+      // They hooked the display to "external" power, and didn't tell anyone
+      heltec_ve(true);
+      delay(5);
+    #endif
     display.init();
+    display.setContrast(255);
     display.flipScreenVertically();
   #endif
 }

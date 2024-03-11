@@ -3,6 +3,8 @@
  * 
 */
 
+// Example does not work with the Wireless Stick v3
+
 #include <heltec.h>
 
 /**

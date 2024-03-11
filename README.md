@@ -12,6 +12,29 @@ This library allows you to use that time to instead play with this cool board. T
 
 &nbsp;
 
+### The great Heltec board confusion
+
+There is some level of general confusion when it comes to Heltec devices. They make a bewildering array of stuff, and it's not always clear (to me at least) what they call certain pieces of hardware and what specs this hardware has. This library is presently for two devices.
+
+* I started making it for something they call "**WiFi LoRa 32(V3)**", "HTIT-WB32LA", or "ESP32 LoRa v3". The board has a USB-C connector, an SX1262 radio, a 128 x 64 OLED display and an ESP32S3 processor. It's the thing on the left in the picture above.
+
+* I have since gotten hold of a "**Wireless Stick(V3)**", with very similar sepcs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
+
+> There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the litlle OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
+
+This library is unlikely to work as is with any other devices, made by heltec or others. You maye still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
+
+For purposes of clarity, I might speak about "the regular board" and "the stick" to mean the two supported devices.
+
+#### `#define HELTEC_WIRELESS_STICK`
+
+If you have the regular board, all the examples and this library work out of the box. If you have a stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you.
+
+> _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
+
+&nbsp;
+
+
 ##### (Click blue headings for more detailed documentation)
 
 ### Setting up
@@ -22,13 +45,13 @@ Make sure your Arduino IDE knows about ESP-32 boards by putting the following UR
 https://espressif.github.io/arduino-esp32/package_esp32_index.json
 ```
 
-Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shell (V3) / Wireless stick lite (V3)*".
+Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shell (V3) / Wireless stick lite (V3)*". Install this library using the Arduino library manager, or by cloning this repository in your Arduino libraries directory.
 
 &nbsp;
 
 ### Getting started
 
-In your sketch, `#include <heltec.h>`, this will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+In your sketch, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
 #include <heltec.h>
@@ -114,7 +137,7 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 
 The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that comes with this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
 
-The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in the`loop()` of your sketch if you use it.
+Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your button gets updated so you can use these functions.
 
 ##### Using it as the power button
 
@@ -128,9 +151,10 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
 
-In deep sleep, with this library, according my multimeter power consumption drops to **147 µA** if you have defined `HELTEC_POWER_BUTTON`, or **24 µA** if you only use the timer to wake up. Please let me know if you can get it lower than that.
+In deep sleep, with this library, according my multimeter power consumption drops to **147 µA** on the regular board (**141 µA** on the stick) if you have defined `HELTEC_POWER_BUTTON`, or **24 µA** on either board if you only use the timer to wake up. Please let me know if you can get it lower than that.
 
 > * _If you call `heltec_deep_sleep()` without a number in seconds when not using the power button feature, you will need to reset it to turn it back on. Note that resetting does reinitialize any `RTC_DATA_ATTR` variables._
+> * _The`deep_sleep_tester` example lets you easily put it in the four essential deep sleep modes: no wakeup other than reset, clock-wakeup, button-wakeup or both. I may be doing somthing wrong, but I don't measure any difference between having clock wakeup enabled and having no wakeup sources._
 
 &nbsp;
 

@@ -1,10 +1,15 @@
 /**
- * Send and receive LoRa-modulation packets with a sequence number,
- * showing RSSI and SNR for received packets on the little display.
+ * Send and receive LoRa-modulation packets with a sequence number, showing RSSI
+ * and SNR for received packets on the little display.
  *
- * Note that while this send and received using LoRa modulation,
- * it does not do LoRaWAN, see the LoRaWAN_TTN example for that.
+ * Note that while this send and received using LoRa modulation, it does not do
+ * LoRaWAN, see the LoRaWAN_TTN example for that.
+ *
+ * This works on the stick, but the output on the screen looks ugly. I'll
+ * probably make a separate version for it.
 */
+
+
 
 // Turns the 'PRG' button into the power button, long press is off 
 #define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"

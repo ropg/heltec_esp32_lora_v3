@@ -14,6 +14,9 @@
  * the same directory.
 */
 
+// Uncomment this if you have the Wireless Stick v3
+// #define HELTEC_WIRELESS_STICK
+
 #include <heltec.h>
 #include <WiFi.h>
 #include "ESPTelnet.h"

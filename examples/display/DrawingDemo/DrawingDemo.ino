@@ -3,6 +3,10 @@
  * 
 */
 
+// Uncomment this if you have the Wireless Stick v3
+// #define HELTEC_WIRELESS_STICK
+
+#define HELTEC_POWER_BUTTON
 #include <heltec.h>
 
 /**
@@ -40,71 +44,71 @@ void drawLines() {
   for (int16_t i = 0; i < display.getWidth(); i += 4) {
     display.drawLine(0, 0, i, display.getHeight() - 1);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
   for (int16_t i = 0; i < display.getHeight(); i += 4) {
     display.drawLine(0, 0, display.getWidth() - 1, i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
-  delay(250);
+  heltec_delay(250);
 
   display.clear();
   for (int16_t i = 0; i < display.getWidth(); i += 4) {
     display.drawLine(0, display.getHeight() - 1, i, 0);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
   for (int16_t i = display.getHeight() - 1; i >= 0; i -= 4) {
     display.drawLine(0, display.getHeight() - 1, display.getWidth() - 1, i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
-  delay(250);
+  heltec_delay(250);
 
   display.clear();
   for (int16_t i = display.getWidth() - 1; i >= 0; i -= 4) {
     display.drawLine(display.getWidth() - 1, display.getHeight() - 1, i, 0);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
   for (int16_t i = display.getHeight() - 1; i >= 0; i -= 4) {
     display.drawLine(display.getWidth() - 1, display.getHeight() - 1, 0, i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
-  delay(250);
+  heltec_delay(250);
   display.clear();
   for (int16_t i = 0; i < display.getHeight(); i += 4) {
     display.drawLine(display.getWidth() - 1, 0, 0, i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
   for (int16_t i = 0; i < display.getWidth(); i += 4) {
     display.drawLine(display.getWidth() - 1, 0, i, display.getHeight() - 1);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
-  delay(250);
+  heltec_delay(250);
 }
 
 // Adapted from Adafruit_SSD1306
-void drawRect(void) {
+void drawRect() {
   for (int16_t i = 0; i < display.getHeight() / 2; i += 2) {
     display.drawRect(i, i, display.getWidth() - 2 * i, display.getHeight() - 2 * i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
 }
 
 // Adapted from Adafruit_SSD1306
-void fillRect(void) {
+void fillRect() {
   uint8_t color = 1;
   for (int16_t i = 0; i < display.getHeight() / 2; i += 3) {
     display.setColor((color % 2 == 0) ? BLACK : WHITE); // alternate colors
     display.fillRect(i, i, display.getWidth() - i * 2, display.getHeight() - i * 2);
     display.display();
-    delay(10);
+    heltec_delay(10);
     color++;
   }
   // Reset back to WHITE
@@ -112,13 +116,13 @@ void fillRect(void) {
 }
 
 // Adapted from Adafruit_SSD1306
-void drawCircle(void) {
+void drawCircle() {
   for (int16_t i = 0; i < display.getHeight(); i += 2) {
     display.drawCircle(display.getWidth() / 2, display.getHeight() / 2, i);
     display.display();
-    delay(10);
+    heltec_delay(10);
   }
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 
   // This will draw the part of the circel in quadrant 1
@@ -129,64 +133,64 @@ void drawCircle(void) {
   //
   display.drawCircleQuads(display.getWidth() / 2, display.getHeight() / 2, display.getHeight() / 4, 0b00000001);
   display.display();
-  delay(200);
+  heltec_delay(200);
   display.drawCircleQuads(display.getWidth() / 2, display.getHeight() / 2, display.getHeight() / 4, 0b00000011);
   display.display();
-  delay(200);
+  heltec_delay(200);
   display.drawCircleQuads(display.getWidth() / 2, display.getHeight() / 2, display.getHeight() / 4, 0b00000111);
   display.display();
-  delay(200);
+  heltec_delay(200);
   display.drawCircleQuads(display.getWidth() / 2, display.getHeight() / 2, display.getHeight() / 4, 0b00001111);
   display.display();
 }
 
-void printBuffer(void) {
+void printBuffer() {
   // Some test data
   const char* test[] = {
-    "Hello",
-    "World" ,
-    "----",
-    "Show off",
-    "how",
-    "the log buffer",
-    "is",
-    "working.",
-    "Even",
-    "scrolling is",
-    "working"
+    "Hello World!",
+    "This goes to" ,
+    "show that",
+    "you can",
+    "print to the",
+    "tiny display.",
+    "As you can",
+    "see scrolling",
+    "works just",
+    "fine. Have a",
+    "nice day !"
   };
   display.clear();
   for (uint8_t i = 0; i < 11; i++) {
     // Print to the screen
     display.println(test[i]);
-    delay(500);
+    heltec_delay(750);
   }
 }
 
 void setup() {
-  display.init();
-
-  display.setContrast(255);
+  heltec_setup();
 
   drawLines();
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 
   drawRect();
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 
   fillRect();
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 
   drawCircle();
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 
   printBuffer();
-  delay(1000);
+  heltec_delay(1000);
   display.clear();
 }
 
-void loop() { }
+void loop() {
+  heltec_loop();
+}
