@@ -110,7 +110,9 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 
 &nbsp;
 
-### [Button](https://github.com/poelstra/arduino-multi-button)
+### [Button](https://github.com/ropg/HotButton)
+
+The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that comes with this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
 
 The user button marked 'PRG' on the board is handled by another library this one depends on, called MultiButton. Since we have only one button, it makes sense to have `button.isSingleClick()`, `button.isDoubleClick()` and so forth. Just remember to put `heltec.loop()` in the`loop()` of your sketch if you use it.
 

@@ -47,7 +47,7 @@
 #include "display/SSD1306Wire.h"
 #include "display/OLEDDisplayUi.h"
 
-#include "PinButton.h"
+#include "HotButton.h"
 
 #ifndef HELTEC_NO_RADIO_INSTANCE
   #ifndef HELTEC_NO_RADIOLIB
@@ -115,7 +115,7 @@ class PrintSplitter : public Print {
   Print &both = Serial;
 #endif
 
-PinButton button(BUTTON);
+HotButton button(BUTTON);
 
 /**
  * @brief Controls the LED brightness based on the given percentage.
@@ -221,6 +221,7 @@ void heltec_deep_sleep(int seconds = 0) {
   // Set button wakeup if applicable
   #ifdef HELTEC_POWER_BUTTON
     esp_sleep_enable_ext0_wakeup(BUTTON, LOW);
+    button.waitForRelease();
   #endif
   // Set timer wakeup if applicable
   if (seconds > 0) {
@@ -299,19 +300,10 @@ void heltec_loop() {
   button.update();
   #ifdef HELTEC_POWER_BUTTON
     // Power off button checking
-    if (button.isLongClick()) {
-      // longClick is not long enough
-      delay(300);
-      if (digitalRead(BUTTON)) {
-        return;
-      }
-      // Visually confirm it's off
+    if (button.pressedFor(1000)) {
+      // Visually confirm it's off so user releases button
       display.displayOff();
-      // then wait for button to be released, 
-      // or it will wake us right up again
-      while (!digitalRead(BUTTON)) {
-        delay(10);
-      }
+      // Deep sleep (has wait for release so we don't wake up immediately)
       heltec_deep_sleep();
     }
   #endif
