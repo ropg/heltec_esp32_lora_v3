@@ -18,7 +18,7 @@ There is some level of general confusion when it comes to Heltec devices. They m
 
 * I started making it for something they call "**WiFi LoRa 32(V3)**", "HTIT-WB32LA", or "ESP32 LoRa v3". The board has a USB-C connector, an SX1262 radio, a 128 x 64 OLED display and an ESP32S3 processor. It's the thing on the left in the picture above.
 
-* I have since gotten hold of a "**Wireless Stick(V3)**", with very similar sepcs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
+* I have since gotten hold of a "**Wireless Stick(V3)**", with very similar specs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
 
 > There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the litlle OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
 
