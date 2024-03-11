@@ -20,7 +20,7 @@ There is some level of general confusion when it comes to Heltec devices. They m
 
 * I have since gotten hold of a "**Wireless Stick(V3)**", with very similar specs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
 
-> There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the litlle OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
+> There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
 
 This library is unlikely to work as is with any other devices, made by heltec or others. You may still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
 
@@ -160,7 +160,7 @@ In deep sleep, with this library, according my multimeter power consumption drop
 
 ### LED
 
-The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
+The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led()` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
 
 &nbsp;
 
@@ -188,6 +188,10 @@ The library contains all the tools to measure your own curve and use it instead,
 ### Ve - external power
 
 There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
+
+On the stick, this is also what powers the OLED display. This libary turns it one when initializing when you have set `#define HELTEC_WIRELESS_STICK` before `#include <heltec.h>`
+
+> _(Not that they told anyone they hooked the display to "external power", so that's one afternoon I will never get back.)_
 
 &nbsp;
 
@@ -240,12 +244,6 @@ For a more meaningful demo, especially if you have two of these boards, [check o
 ### Pinout
 
 ![](images/pins.png)
-
-&nbsp;
-
-### [Spectrum analyzer example](examples/display_and_radio/spectrum_analyzer/spectrum_analyzer.ino)
-
-![](images/spectrum_analyzer.jpg)
 
 
 &nbsp;
