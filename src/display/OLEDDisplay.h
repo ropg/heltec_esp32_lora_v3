@@ -271,6 +271,9 @@ class OLEDDisplay : public Stream {
     // ArialMT_Plain_10, ArialMT_Plain_16, ArialMT_Plain_24
     void setFont(const uint8_t *fontData);
 
+    // Set the current font when supplied as a char* instead of a uint8_t*
+    void setFont(const char *fontData);
+
     // Set the function that will convert utf-8 to font table index
     void setFontTableLookupFunction(FontTableLookupFunction function);
 
@@ -312,6 +315,8 @@ class OLEDDisplay : public Stream {
     void clear(void);
 
     // Log buffer implementation
+
+    void cls();
 
     // This will define the lines and characters you can
     // print to the screen. When you exeed the buffer size (lines * chars)
@@ -363,6 +368,7 @@ class OLEDDisplay : public Stream {
     uint16_t   logBufferFilled;
     uint16_t   logBufferLine;
     uint16_t   logBufferMaxLines;
+    uint16_t   logBufferLineLen;
     char      *logBuffer;
     bool      inhibitDrawLogBuffer;
 
