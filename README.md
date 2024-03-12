@@ -189,7 +189,7 @@ The library contains all the tools to measure your own curve and use it instead,
 
 There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
 
-On the stick, this is also what powers the OLED display. This libary turns it one when initializing when you have set `#define HELTEC_WIRELESS_STICK` before `#include <heltec.h>`
+On the stick, this is also what powers the OLED display. This libary turns it on when initializing when you have set `#define HELTEC_WIRELESS_STICK` before `#include <heltec.h>`
 
 > _(Not that they told anyone they hooked the display to "external power", so that's one afternoon I will never get back.)_
 
@@ -202,6 +202,9 @@ On the stick, this is also what powers the OLED display. This libary turns it on
 ```cpp
 // Turns the 'PRG' button into the power button, long press is off 
 #define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
+
+// Uncomment this if you have Wireless Stick v3
+// #define HELTEC_WIRELESS_STICK
 
 // creates 'radio', 'display' and 'button' instances 
 #include <heltec.h>
