@@ -244,12 +244,21 @@ For a more meaningful demo, especially if you have two of these boards, [check o
 
 &nbsp;
 
-### Pinout
+## Reference
 
-![](images/pins.png)
+### Heltec_ESP32_LoRa_v3 / "the regular board"
 
+![](images/heltec_esp32_lora_v3_pinout.png)
+
+[![](images/heltec_esp32_lora_v3_schematic.png)](https://github.com/ropg/heltec_esp32_lora_v3/blob/main/images/heltec_esp32_lora_v3_schematic.pdf)
 
 &nbsp;
+
+### Heltec_Wireless_Stick_v3_pinout / "the stick"
+
+![](images/Heltec_Wireless_Stick_v3_pinout.jpg)
+
+[![](images/Heltec_Wireless_Stick_v3_schematic.png)](images/Heltec_Wireless_Stick_v3_schematic.pdf)
 
 &nbsp;
 
