@@ -51,7 +51,7 @@ Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shel
 
 ### Getting started
 
-In your sketch, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+In your sketch, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
 #include <heltec.h>
@@ -71,7 +71,8 @@ void loop() {
 
 &nbsp;
 
-If you `#define HELTEC_NO_RADIO_INSTANCE` and/or `#define HELTEC_NO_DISPLAY_INSTANCE` before `#include <heltec.h>`, you get no instances of `radio` and/or `display`, so you can set these up manually. Note that the library then also doesn't turn things off at sleep, etc.
+> * _If you `#define HELTEC_NO_RADIO_INSTANCE` and/or `#define HELTEC_NO_DISPLAY_INSTANCE` before `#include <heltec.h>`, you get no instances of `radio` and/or `display`, so you can set these up manually. Note that the library then also doesn't turn things off at sleep, etc._
+> * _If you would prefer these libraries not even be included, use `#define NO_RADIOLIB` and `#define NO_DISPLAY` respectively._
 
 &nbsp;
 
@@ -175,7 +176,7 @@ Note that it takes a single cell (3.7 V) LiPo and that the plus is on the left s
 > * _According to the [schematic](images/heltec_esp32_lora_v3_schematic.pdf), the charge current is set to 500 mA. There's a voltage measuring setup where if GPIO37 is pulled low, the battery voltage appears on GPIO1. (Resistor-divided: VBAT - 390kΩ - GPIO1 - 100kΩ - GND)_
 > * _You can optionally provide the float that `heltec_vbat()` returns to `heltec_battery_percent()` to make sure both are based on the same measurement._
 > * _The [charging IC](images/tp4054.pdf) used will charge the battery to ~4.2V, then hold the voltage there until charge current is 1/10 the set current (i.e. 50 mA) and then stop and let it discharge to 4.05V (about 90%) and then charge it again, so this is expected._
-> * _The orange charging LED, on but very dim is no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃ so nothing too bad can happen, just so you know._
+> * _The orange charging LED, on but very dim if no battery is plugged in, is awfully bright when charging, and the IC on the reverse side of the reset switch gets quite hot when the battery is charging but still fairly empty. It's limited to 100 ℃ so nothing too bad can happen, just so you know._
 
 The battery percentage estimate in this library is based on a real LiPo discharge curve.
 
@@ -244,7 +245,54 @@ For a more meaningful demo, especially if you have two of these boards, [check o
 
 &nbsp;
 
-## Reference
+## Quick Reference
+
+Here's a list of everything previous. Everything is clickable for more information. Remember these defines only work if they occur before `#include <heltec.h>`
+
+<table>
+<tr><th align="left"> 
+
+`#define`
+</th><th align="left">
+
+functions
+</th><th align="left">
+
+instances
+</th></tr>
+
+</tr><tr><td valign = "top">
+
+[`HELTEC_NO_DISPLAY`](#getting-started)
+[`HELTEC_NO_DISPLAY_INSTANCE`](#getting-started)
+[`HELTEC_NO_RADIOLIB`](#getting-started)
+[`HELTEC_NO_RADIO_INSTANCE`](#getting-started)
+[`HELTEC_POWER_BUTTON`](#using-it-as-the-power-button)
+[`HELTEC_WIRELESS_STICK`](#define-heltec_wireless_stick)
+
+</td><td valign = "top">
+
+[`int heltec_battery_percent(float vbat = -1)`](#battery)
+[`void heltec_deep_sleep(int seconds = 0)`](#deep-sleep)
+[`void heltec_delay(int ms)`](#using-it-as-the-power-button)
+[`void heltec_led(int percent)`](#led)
+[`void heltec_loop()`](#getting-started)
+[`void heltec_setup()`](#getting-started)
+[`float heltec_vbat()`](#battery)
+[`void heltec_ve(bool state)`](#ve---external-power)
+[`bool heltec_wakeup_was_button()`](#deep-sleep)
+[`bool heltec_wakeup_was_timer()`](#deep-sleep)
+
+</td><td valign = "top">
+
+[`button`](https://github.com/ropg/HotButton)
+[`display`](https://github.com/ThingPulse/esp8266-oled-ssd1306)
+[`radio`](https://jgromes.github.io/RadioLib/)
+
+</td></tr></table>
+
+&nbsp;
+
 
 ### Heltec_ESP32_LoRa_v3 / "the regular board"
 
