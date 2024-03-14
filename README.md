@@ -264,29 +264,45 @@ instances
 </tr><tr><td valign = "top">
 
 [`HELTEC_NO_DISPLAY`](#getting-started)
+
 [`HELTEC_NO_DISPLAY_INSTANCE`](#getting-started)
+
 [`HELTEC_NO_RADIOLIB`](#getting-started)
+
 [`HELTEC_NO_RADIO_INSTANCE`](#getting-started)
+
 [`HELTEC_POWER_BUTTON`](#using-it-as-the-power-button)
+
 [`HELTEC_WIRELESS_STICK`](#define-heltec_wireless_stick)
 
 </td><td valign = "top">
 
 [`int heltec_battery_percent(float vbat = -1)`](#battery)
+
 [`void heltec_deep_sleep(int seconds = 0)`](#deep-sleep)
+
 [`void heltec_delay(int ms)`](#using-it-as-the-power-button)
+
 [`void heltec_led(int percent)`](#led)
+
 [`void heltec_loop()`](#getting-started)
+
 [`void heltec_setup()`](#getting-started)
+
 [`float heltec_vbat()`](#battery)
+
 [`void heltec_ve(bool state)`](#ve---external-power)
+
 [`bool heltec_wakeup_was_button()`](#deep-sleep)
+
 [`bool heltec_wakeup_was_timer()`](#deep-sleep)
 
 </td><td valign = "top">
 
 [`button`](https://github.com/ropg/HotButton)
-[`display`](https://github.com/ThingPulse/esp8266-oled-ssd1306)
+
+[`display`](https://github.com/ThingPulse/esp8266-oled-ssd1306#api)
+
 [`radio`](https://jgromes.github.io/RadioLib/)
 
 </td></tr></table>
