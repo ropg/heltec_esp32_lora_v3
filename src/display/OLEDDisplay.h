@@ -314,16 +314,25 @@ class OLEDDisplay : public Stream {
     // Clear the local pixel buffer
     void clear(void);
 
-    // Log buffer implementation
+    // Print class device
 
+    // Because this display class is "derived" from Arduino's Print class,
+    // various function that work on it also work here. These functions include
+    // print, println and printf. 
+
+    // cls() will clear the display immediately and empty the logBuffer, meaning
+    // the next print statement will print at the top of the display again.
+    // cls() should not be confused with clear(), which only clears the internal
+    // graphics buffer, which can then be shown on the display with display().
     void cls();
 
-    // This will define the lines and characters you can
-    // print to the screen. When you exeed the buffer size (lines * chars)
-    // the output may be truncated due to the size constraint.
-    bool setLogBuffer(uint16_t lines, uint16_t chars);
+    // (re)creates the logBuffer that printing uses to remember what was on the
+    // screen already 
+    bool setLogBuffer();
 
     // Draw the log buffer at position (x, y)
+    //
+    // (Automatically called with you use print, println or printf)
     void drawLogBuffer(uint16_t x, uint16_t y);
 
     // Get screen geometry
