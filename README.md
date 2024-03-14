@@ -4,7 +4,7 @@
 
 ![](images/ESP32_LoRa_v3.png)
 
-<p align="right">jump to <b><a href="#quick-reference">Quick Reference</a></b></p>
+<p align="right"><kbd><b><a href="#quick-reference">Quick Reference</a></b></kbd></p>
 
 ### Introduction
 
