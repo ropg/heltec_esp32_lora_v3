@@ -165,7 +165,7 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 
 <kbd><b><a href="https://github.com/ropg/HotButton">API documentation</a></b></kbd>
 
-The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that comes with this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
+The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that is automatically installed when you install this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
 
 Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your button gets updated so you can use these functions.
 
