@@ -143,7 +143,7 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 > * _The `heltec_loop()` part in `RADIOLIB_OR_HALT` makes sure that if you have set the `PRG` button to be the power button, it still works when execution is halted._
 > * _`_radiolib_status` is an integer that the library provides and that your code can check afterwards to see what happened._
-> * _`_radiolib_result_string()` returns a textual representation (e.g. `CHIP_NOT_FOUND`) for a few of the most common errors or a URL to look up the others._
+> * _`radiolib_result_string()` returns a textual representation (e.g. `CHIP_NOT_FOUND`) for a few of the most common errors or a URL to look up the others._
 
 &nbsp;
 
