@@ -1,6 +1,6 @@
 # Heltec ESP32 LoRa v3
 
-## The unofficial library
+### The unofficial library
 
 ![](images/ESP32_LoRa_v3.png)
 
@@ -12,6 +12,8 @@ There's this Chinese company named Heltec, and they make a cool little developme
 
 This library allows you to use that time to instead play with this cool board. The examples are tested, and this library assumes that for all things sub-GHz, you want to use the popular RadioLib.
 
+&nbsp;
+
 ### The great Heltec board confusion
 
 There is some level of general confusion when it comes to Heltec devices. They make a bewildering array of stuff, and it's not always clear (to me at least) what they call certain pieces of hardware and what specs this hardware has. This library is presently for two devices.
@@ -20,38 +22,57 @@ There is some level of general confusion when it comes to Heltec devices. They m
 
 * I have since gotten hold of a "**Wireless Stick(V3)**", with very similar specs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
 
-> There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that.
+> * _There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that._
 
 This library is unlikely to work as is with any other devices, made by heltec or others. You may still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
 
 For purposes of clarity, I might speak about "the regular board" and "the stick" to mean the two supported devices.
 
-#### `#define HELTEC_WIRELESS_STICK`
+&nbsp;
 
-If you have the regular board, all the examples and this library work out of the box. If you have a stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you.
+### Setting up - Board Definitions
 
-> _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
+Normally, the starting point for making software for a piece of hardware is selecting the board from the "Arduino board manager". If your board isn't an original AVR Arduino, (such as any ESP32-based board, you might need to add a "Board Manager URL" in the Arduino IDE. Espressif maintains a long list of ESP32-based boards with their board definition files.
+
+##### However ...
+
+Heltec publishes board definitions, both on their own URL which is in some of their documentation and in the (identical) definitions for their products as spread by Espressif. However, these do not let you select a partition table. That's right: if you use their definitions, you **cannot** change partition tables. Definitions for some of their other products do allow for selecting different partition tables, but then they offer a variety of tables for the wrong-size flash chip and leave out some of the right ones. But for these two boards the option is simply just gone from the *"Tools"* menu. My current guess is they didn't plan to do this: somebody just fat-fingered a copy-paste in the `boards.txt` file. But never mind why, let's fix it.
+
+##### Using my board definitions
+
+I've created my own board definitions for these boards. To use them, start the Arduino IDE, go to "Settings" and add the following URL to the *"Additional board manager URLs"* field:
+
+```
+https://ropg.github.io/heltec_boards/boards.json
+```
+
+*(Make sure any URLs that are there are sperated by commas. If you hit OK the IDE will then load the files needed.)*
+
+![](images/board_manager_url.png)
+
+Once that's done, you can go to the *"Tools / Board"* menu and select either of our two supported boards from the *"Heltec (unofficial)"* sub-menu.
+
+![](images/tools_board.png)
 
 &nbsp;
 
+> * _Now if you were to say that it's a bit wasteful to install a copy of the entire ESP32 toolchain just because some manufacturer has silly board definitions, I would agree. I did take out the toolchains for the ESP32 variants not in use here, so it's "only" 80 MB instead of 250. Yes, there needs to be a more granular mechanism to tinker with board definitions._
 
-##### (Click blue headings for more detailed documentation)
+&nbsp;
 
-### Setting up
+##### Not using my board definitions? `#define HELTEC_WIRELESS_STICK`
 
-Make sure your Arduino IDE knows about ESP-32 boards by putting the following URL under "Additional board manager URLs" in the Arduino IDE settings:
+If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you.
 
-```
-https://espressif.github.io/arduino-esp32/package_esp32_index.json
-```
-
-Then under "*Settings / Board*" select "*Heltec WiFi LoRa 32(V3) / Wireless shell (V3) / Wireless stick lite (V3)*". Install this library using the Arduino library manager, or by cloning this repository in your Arduino libraries directory.
+> * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
 &nbsp;
 
 ### Getting started
 
-In your sketch, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+First, install this library if you haven't already, either by hitting "Install" from the Arduino IDE's library manager or by copying the files in this repository to your Arduino libraries directory.
+
+Then, in your sketches, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
 #include <heltec.h>
@@ -76,13 +97,17 @@ void loop() {
 
 &nbsp;
 
-### [RadioLib](https://jgromes.github.io/RadioLib/)
+### RadioLib
+
+<kbd><b><a href="https://jgromes.github.io/RadioLib/">API documentation</a></b></kbd>
+
+
 
 This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com/ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to have a more generic mechanism allowing for the retention of state information and as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
 
 Next to the radio examples in this library, all [RadioLib examples](https://github.com/jgromes/RadioLib/tree/master/examples) that work with an SX1262 work here. Simply `#include <heltec.h>` instead of RadioLib and remove any code that creates a `radio` instance, it already exists when you include this library.
 
-> * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` and much of their own software as DIO0. The SX1262 IO pins start at DIO1._
+> * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` (my board definitions have it as both) and much of their own software as DIO0. The SX1262 IO pins start at DIO1._
 > * _If you place `#define HELTEC_NO_RADIOLIB` before `#include <heltec.h>`, RadioLib will not be included and this library won't create a radio object. Handy if you are not using the radio and need the space in flash for something else or if you want to use another radio library or so._
 
 &nbsp;
@@ -122,7 +147,9 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 &nbsp;
 
-### [Display](https://github.com/ThingPulse/esp8266-oled-ssd1306)
+### Display
+
+<kbd><b><a href="https://github.com/ThingPulse/esp8266-oled-ssd1306#api">API documentation</a></b></kbd>
 
 The tiny OLED display uses the same library that the original library from Heltec uses, except now the examples work so you don't have to figure out how to make things work. It is included inside this library because the Heltec board needs a hardware reset and I adapted some things to make the Arduino `print` functionality work better. (The latter change [submitted](https://github.com/ThingPulse/esp8266-oled-ssd1306/pull/389) to the original library also.)
 
@@ -134,7 +161,9 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 
 &nbsp;
 
-### [Button](https://github.com/ropg/HotButton)
+### Button
+
+<kbd><b><a href="https://github.com/ropg/HotButton">API documentation</a></b></kbd>
 
 The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that comes with this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
 
@@ -148,7 +177,7 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 &nbsp;
 
-### [Deep Sleep](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/)
+### Deep Sleep
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
 
@@ -310,7 +339,7 @@ instances
 &nbsp;
 
 
-### Heltec_ESP32_LoRa_v3 / "the regular board"
+### Heltec ESP32 LoRa v3 / HTIT-WB32LA / "the regular board"
 
 ![](images/heltec_esp32_lora_v3_pinout.png)
 
@@ -318,7 +347,7 @@ instances
 
 &nbsp;
 
-### Heltec_Wireless_Stick_v3_pinout / "the stick"
+### Heltec Wireless Stick v3 / HTIT-WS_v3 / "the stick"
 
 ![](images/Heltec_Wireless_Stick_v3_pinout.jpg)
 

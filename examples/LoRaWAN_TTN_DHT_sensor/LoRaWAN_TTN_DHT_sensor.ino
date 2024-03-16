@@ -72,7 +72,7 @@ DHT dht(DHTPIN, DHTTYPE);
 // so don't use those.
 #define FPORT 10
 
-#define HELTEC_WIRELESS_STICK
+
 #include <heltec.h>
 
 // create the node instance on the EU-868 band using the radio module and the

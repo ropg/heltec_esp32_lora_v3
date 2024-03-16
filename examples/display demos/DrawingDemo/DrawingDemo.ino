@@ -3,8 +3,6 @@
  * 
 */
 
-// Uncomment this if you have the Wireless Stick v3
-// #define HELTEC_WIRELESS_STICK
 
 #define HELTEC_POWER_BUTTON
 #include <heltec.h>
