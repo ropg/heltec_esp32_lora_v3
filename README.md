@@ -302,7 +302,7 @@ instances
 
 [`HELTEC_POWER_BUTTON`](#using-it-as-the-power-button)
 
-[`HELTEC_WIRELESS_STICK`](#define-heltec_wireless_stick)
+[`HELTEC_WIRELESS_STICK`](#not-using-my-board-definitions-define-heltec_wireless_stick)
 
 </td><td valign = "top">
 
