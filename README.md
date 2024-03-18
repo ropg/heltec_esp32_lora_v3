@@ -22,7 +22,7 @@ There is some level of general confusion when it comes to Heltec devices. They m
 
 * I have since gotten hold of a "**Wireless Stick(V3)**", with very similar specs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
 
-> * _There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that._
+* _There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that._
 
 This library is unlikely to work as is with any other devices, made by heltec or others. You may still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
 
@@ -225,6 +225,27 @@ On the stick, this is also what powers the OLED display. This libary turns it on
 
 &nbsp;
 
+### Built-ibn temperature sensor
+
+```cpp
+float temp = heltec_temperature();
+```
+
+The ESP32 has an internal temperature sensor.  Our measurement function picks the most accurate out of 5 possible ranges. Accuracy is listed by Espressif as follows:
+
+| from  | to  | max. err. |
+| ----:| ---:|:----------:|
+-40°C | -30°C | < 3°C
+-30°C | -10°C | < 2°C
+-10°C | 80°C  | < 1°C
+80°C  | 100°C | < 2°C
+100°C | 125°C | < 3°C
+
+In scenarios where there's a lot of deep sleep, make sure you get your measurement right after boot and it might be a decent proxy for ambient temperatore.
+
+
+&nbsp;
+
 &nbsp;
 
 ## Minimal example to show everything:
@@ -317,6 +338,8 @@ instances
 [`void heltec_loop()`](#getting-started)
 
 [`void heltec_setup()`](#getting-started)
+
+[`float heltec_temperature()`](#temperature)
 
 [`float heltec_vbat()`](#battery)
 

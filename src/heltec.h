@@ -11,6 +11,8 @@
 #ifndef heltec_h
 #define heltec_h
 
+#include "driver/temp_sensor.h"
+
 // 'PRG' Button
 #define BUTTON    GPIO_NUM_0
 // LED pin & PWM parameters
@@ -279,6 +281,40 @@ bool heltec_wakeup_was_button() {
  */
 bool heltec_wakeup_was_timer() {
   return esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER;
+}
+
+/**
+ * @brief Measures esp32 chip temperature
+ * 
+ * @return float with temperature in degrees celsius.
+*/
+float heltec_temperature(){
+  // We start with the coldest range, because those temps get spoiled 
+  // the quickest by heat of processor waking up. 
+  temp_sensor_dac_offset_t offsets[5] = {
+    TSENS_DAC_L4,   // (-40°C ~  20°C, err <3°C)
+    TSENS_DAC_L3,   // (-30°C ~  50°C, err <2°C)
+    TSENS_DAC_L2,   // (-10°C ~  80°C, err <1°C)
+    TSENS_DAC_L1,   // ( 20°C ~ 100°C, err <2°C)
+    TSENS_DAC_L0    // ( 50°C ~ 125°C, err <3°C)
+  };
+
+  // If temperature for given n below this value,
+  // then this is the best measurement we have.
+  int cutoffs[5] = { -30, -10, 80, 100, 2500 };
+
+  float result = 0;
+  for (int n = 0; n < 5; n++) {
+    temp_sensor_config_t temp_sensor = TSENS_CONFIG_DEFAULT();
+    temp_sensor.dac_offset = offsets[n];
+    temp_sensor_set_config(temp_sensor);
+    temp_sensor_start();
+    temp_sensor_read_celsius(&result);
+    temp_sensor_stop();
+    // Serial.printf("L%d: %f°C\n", 4 - n, result);
+    if (result < cutoffs[n]) break;
+  }
+  return result;
 }
 
 /**
