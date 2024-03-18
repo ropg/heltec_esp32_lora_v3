@@ -339,7 +339,7 @@ instances
 
 [`void heltec_setup()`](#getting-started)
 
-[`float heltec_temperature()`](#temperature)
+[`float heltec_temperature()`](#built-in-temperature-sensor)
 
 [`float heltec_vbat()`](#battery)
 
