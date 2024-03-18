@@ -241,7 +241,7 @@ The ESP32 has an internal temperature sensor.  Our measurement function picks th
 80°C  | 100°C | < 2°C
 100°C | 125°C | < 3°C
 
-In scenarios where there's a lot of deep sleep, make sure you get your measurement right after boot and it might be a decent proxy for ambient temperatore.
+In scenarios where there's a lot of deep sleep, make sure you get your measurement right after boot and it might be a decent proxy for ambient temperature.
 
 
 &nbsp;
