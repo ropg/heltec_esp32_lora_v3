@@ -225,7 +225,7 @@ On the stick, this is also what powers the OLED display. This libary turns it on
 
 &nbsp;
 
-### Built-ibn temperature sensor
+### Built-in temperature sensor
 
 ```cpp
 float temp = heltec_temperature();
