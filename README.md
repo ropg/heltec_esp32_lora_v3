@@ -254,7 +254,7 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 <kbd><b><a href="https://github.com/ThingPulse/esp8266-oled-ssd1306#api">API documentation</a></b></kbd>
 
-The tiny OLED display uses the same library that the original library from Heltec uses, except now the examples work so you don't have to figure out how to make things work. It is included inside this library because the Heltec board needs a hardware reset and I adapted some things to make the Arduino `print` functionality work better. (The latter change [submitted](https://github.com/ThingPulse/esp8266-oled-ssd1306/pull/389) to the original library also.)
+The tiny OLED display uses the same library that the original library from Heltec uses, except now the examples work so you don't have to figure out how to make things work. It is included inside this library because the Heltec board needs a hardware reset and I adapted some things to make the Arduino `print` functionality work better. (The latter changes [submitted](https://github.com/ThingPulse/esp8266-oled-ssd1306/pull/389) to the original library also.)
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 

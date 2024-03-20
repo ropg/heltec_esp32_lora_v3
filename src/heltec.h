@@ -39,7 +39,13 @@
 #define SCL_OLED  GPIO_NUM_18
 #define RST_OLED  GPIO_NUM_21
 
-#ifndef HELTEC_NO_RADIOLIB
+#ifdef HELTEC_WIRELESS_STICK_LITE
+  #define HELTEC_NO_DISPLAY
+#endif
+
+#ifdef HELTEC_NO_RADIOLIB
+  #define HELTEC_NO_RADIO_INSTANCE
+#else
   #include "RadioLib/RadioLib.h"
   // make sure the power off button works when using RADIOLIB_OR_HALT
   // (See RadioLib_convenience.h)
@@ -55,12 +61,6 @@
 #endif
 
 #include "HotButton.h"
-
-#ifndef HELTEC_NO_RADIO_INSTANCE
-  #ifndef HELTEC_NO_RADIOLIB
-    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
-  #endif
-#endif
 
 // Don't you just hate it when battery percentages are wrong?
 //
@@ -85,32 +85,36 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7,
 };
 
-/**
- * @class PrintSplitter
- * @brief A class that splits the output of the Print class to two different
- *        Print objects.
- *
- * The PrintSplitter class is used to split the output of the Print class to two
- * different Print objects. It overrides the write() function to write the data
- * to both Print objects.
- */
-class PrintSplitter : public Print {
-  public:
-    PrintSplitter(Print &_a, Print &_b) : a(_a), b(_b) {}
-    size_t write(uint8_t c) {
-      a.write(c);
-      return b.write(c);
-    }
-    size_t write(const char* str) {
-      a.write(str);
-      return b.write(str);
-    }
-  private:
-    Print &a;
-    Print &b;
-};
+#ifndef HELTEC_NO_RADIO_INSTANCE
+  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+#endif
 
 #ifndef HELTEC_NO_DISPLAY_INSTANCE
+  /**
+   * @class PrintSplitter
+   * @brief A class that splits the output of the Print class to two different
+   *        Print objects.
+   *
+   * The PrintSplitter class is used to split the output of the Print class to two
+   * different Print objects. It overrides the write() function to write the data
+   * to both Print objects.
+   */
+  class PrintSplitter : public Print {
+    public:
+      PrintSplitter(Print &_a, Print &_b) : a(_a), b(_b) {}
+      size_t write(uint8_t c) {
+        a.write(c);
+        return b.write(c);
+      }
+      size_t write(const char* str) {
+        a.write(str);
+        return b.write(str);
+      }
+    private:
+      Print &a;
+      Print &b;
+  };
+
   #ifdef HELTEC_WIRELESS_STICK
     #define DISPLAY_GEOMETRY GEOMETRY_64_32
   #else
@@ -348,8 +352,10 @@ void heltec_loop() {
   #ifdef HELTEC_POWER_BUTTON
     // Power off button checking
     if (button.pressedFor(1000)) {
-      // Visually confirm it's off so user releases button
-      display.displayOff();
+      #ifndef HELTEC_NO_DISPLAY_INSTANCE
+        // Visually confirm it's off so user releases button
+        display.displayOff();
+      #endif
       // Deep sleep (has wait for release so we don't wake up immediately)
       heltec_deep_sleep();
     }
