@@ -26,15 +26,11 @@ First of all let's be clear what hardware we are talking about here. There is so
 <tr><td colspan="3" align="center">
 
 **ESP32-S3** processor<br>
-<sup>*( 2.4 GHz WiFi, BT 5 LE, 512 MB SRAM )*</sup>
-
-**8 MB** SPI flash
-
-USB-C, **CP2102** USB serial chip
-
-Semtech **SX1262** sub-GHz transceiver
-
-3.7V LiPo battery charging circuit
+<sup>*( 2.4 GHz WiFi, BT 5 LE, 512 MB SRAM )*</sup><br>
+**8 MB** SPI flash<br>
+USB-C, **CP2102** USB serial chip<br>
+Semtech **SX1262** sub-GHz transceiver<br>
+3.7V LiPo battery charging circuit<br>
 
 </td>
 
