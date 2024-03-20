@@ -54,20 +54,20 @@ Semtech **SX1262** sub-GHz transceiver<br>
 
 <td align="center" valign="top">
 
-**WiFi LoRa 32(V3)** a.k.a.
-**HTIT-WB32LA** a.k.a.
+**WiFi LoRa 32(V3)** a.k.a.<br>
+**HTIT-WB32LA** a.k.a.<br>
 **ESP32 LoRa v3**
 
 </td><td align="center" valign="top">
 
-**Wireless Stick(V3)** a.k.a.
+**Wireless Stick(V3)** a.k.a.<br>
 **HTIT-WS_V3**
 
 </td><td align="center" valign="top">
 
 
 
-**Wireless Stick Lite(V3)**
+**Wireless Stick Lite(V3)**<br>
 a.k.a. **HTIT-WSL_V3**
 
 </td>
