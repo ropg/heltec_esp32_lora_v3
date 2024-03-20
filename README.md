@@ -25,11 +25,15 @@ First of all let's be clear what hardware we are talking about here. There is so
 <table>
 <tr><td colspan="3" align="center">
 
-**ESP32-S3** processor
+**ESP32-S3** processor<br>
 <sup>*( 2.4 GHz WiFi, BT 5 LE, 512 MB SRAM )*</sup>
+
 **8 MB** SPI flash
+
 USB-C, **CP2102** USB serial chip
+
 Semtech **SX1262** sub-GHz transceiver
+
 3.7V LiPo battery charging circuit
 
 </td>
@@ -37,15 +41,15 @@ Semtech **SX1262** sub-GHz transceiver
 
 <tr>
 
-<td width="220px" align="center" valign="top">
+<td width="300px" align="center" valign="top">
 
 ![](images/regular_board_mini_img.png)
 
-<td width="220px" align="center" valign="top">
+<td width="300px" align="center" valign="top">
 
 ![](images/stick_lite_mini_img.png)
 
-<td width="220px" align="center" valign="top">
+<td width="300px" align="center" valign="top">
 
 ![](images/lite_mini_img.png)
 
