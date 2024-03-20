@@ -14,31 +14,129 @@ This library allows you to use that time to instead play with this cool board. T
 
 &nbsp;
 
+<hr>
+
 ### The great Heltec board confusion
 
-There is some level of general confusion when it comes to Heltec devices. They make a bewildering array of stuff, and it's not always clear (to me at least) what they call certain pieces of hardware and what specs this hardware has. This library is presently for two devices.
-
-* I started making it for something they call "**WiFi LoRa 32(V3)**", "HTIT-WB32LA", or "ESP32 LoRa v3". The board has a USB-C connector, an SX1262 radio, a 128 x 64 OLED display and an ESP32S3 processor. It's the thing on the left in the picture above.
-
-* I have since gotten hold of a "**Wireless Stick(V3)**", with very similar specs and an even smaller 64 x 32 OLED display. It's almost the same on the electrical side of things, the most notable exception being that the power of the display is now connected to "external power" that needs to be explicitly turned on with a GPIO pin. This device is now also supported by this library. It's the device on the right in the image.
-
-* _There is apparently a "**Wireless Stick Lite (v3)**" that just lacks the little OLED screen. This library **may or may not work** fine with it, I don't have one so I haven't checked that._
-
-This library is unlikely to work as is with any other devices, made by heltec or others. You may still be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is known to work with the two pictured boards only**.
-
-For purposes of clarity, I might speak about "the regular board" and "the stick" to mean the two supported devices.
+First of all let's be clear what hardware we are talking about here. There is some level of general confusion when it comes to Heltec devices. They make a bewildering array of stuff, and it's not always clear (to me at least) what they call certain pieces of hardware and what specs this hardware has. This library is made to work with the devices pictured below. Their names all end in "v3".
 
 &nbsp;
+
+<table>
+<tr><td colspan="3" align="center">
+
+**ESP32-S3** processor
+<sup>*( 2.4 GHz WiFi, BT 5 LE, 512 MB SRAM )*</sup>
+**8 MB** SPI flash
+USB-C, **CP2102** USB serial chip
+Semtech **SX1262** sub-GHz transceiver
+3.7V LiPo battery charging circuit
+
+</td>
+
+
+<tr>
+
+<td width="220px" align="center" valign="top">
+
+![](images/regular_board_mini_img.png)
+
+<td width="220px" align="center" valign="top">
+
+![](images/stick_lite_mini_img.png)
+
+<td width="220px" align="center" valign="top">
+
+![](images/lite_mini_img.png)
+
+</td>
+</tr><tr>
+
+<td align="center" valign="top">
+
+**WiFi LoRa 32(V3)** a.k.a.
+**HTIT-WB32LA** a.k.a.
+**ESP32 LoRa v3**
+
+</td><td align="center" valign="top">
+
+**Wireless Stick(V3)** a.k.a.
+**HTIT-WS_V3**
+
+</td><td align="center" valign="top">
+
+
+
+**Wireless Stick Lite(V3)**
+a.k.a. **HTIT-WSL_V3**
+
+</td>
+
+</tr>
+
+<tr><td align="center" valign="top">
+
+**128 x 64 OLED**
+
+</td>
+<td align="center" valign="top">
+
+**64 x 32 OLED**
+
+</td>
+<td align="center" valign="top">
+
+no display
+
+</td></tr>
+
+<tr><td align="center" valign="top">
+
+No RF shielding
+
+</td>
+<td align="center" valign="top" colspan="2">
+
+Metal shielding
+
+</td>
+</tr>
+
+<tr><td align="center" valign="top" colspan="2">
+
+Built-in Wifi antenna
+LoRa antenna connector IPEX1.0
+
+
+</td>
+<td align="center" valign="top">
+
+Built-in Wifi antenna
+WiFi ant. conn. IPEX1.0 (right)
+LoRa ant. conn. IPEX1.0 (left)
+
+</td>
+</tr>
+
+</table>
+
+&nbsp;
+
+This library is unlikely to work as is with any other devices, whether made by Heltec or by others. You may be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is only known to work with the boards picture above**. For purposes of clarity, I might speak about "the regular board", "the stick" and "the stick lite" to mean the supported devices.`
+
+&nbsp;
+
+<hr>
 
 ### Setting up - Board Definitions
 
 Normally, the starting point for making software for a piece of hardware is selecting the board from the "Arduino board manager". If your board isn't an original AVR Arduino, (such as any ESP32-based board, you might need to add a "Board Manager URL" in the Arduino IDE. Espressif maintains a long list of ESP32-based boards with their board definition files.
 
-##### However ...
+#### However ...
 
 Heltec publishes board definitions, both on their own URL which is in some of their documentation and in the (identical) definitions for their products as spread by Espressif. However, these do not let you select a partition table. That's right: if you use their definitions, you **cannot** change partition tables. Definitions for some of their other products do allow for selecting different partition tables, but then they offer a variety of tables for the wrong-size flash chip and leave out some of the right ones. But for these two boards the option is simply just gone from the *"Tools"* menu. My current guess is they didn't plan to do this: somebody just fat-fingered a copy-paste in the `boards.txt` file. But never mind why, let's fix it.
 
-##### Using my board definitions
+#### Using my board definitions
 
 I've created my own board definitions for these boards. To use them, start the Arduino IDE, go to "Settings" and add the following URL to the *"Additional board manager URLs"* field:
 
@@ -60,13 +158,15 @@ Once that's done, you can go to the *"Tools / Board"* menu and select either of 
 
 &nbsp;
 
-##### Not using my board definitions? `#define HELTEC_WIRELESS_STICK`
+#### Not using my board definitions? `#define HELTEC_WIRELESS_STICK`
 
 If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you.
 
 > * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
 &nbsp;
+
+<hr>
 
 ### Getting started
 
@@ -96,6 +196,8 @@ void loop() {
 > * _If you would prefer these libraries not even be included, use `#define NO_RADIOLIB` and `#define NO_DISPLAY` respectively._
 
 &nbsp;
+
+<hr>
 
 ### RadioLib
 
@@ -147,6 +249,8 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 &nbsp;
 
+<hr>
+
 ### Display
 
 <kbd><b><a href="https://github.com/ThingPulse/esp8266-oled-ssd1306#api">API documentation</a></b></kbd>
@@ -155,11 +259,13 @@ The tiny OLED display uses the same library that the original library from Helte
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
-##### Printing to both Serial and display: `both.print()`
+#### Printing to both Serial and display: `both.print()`
 
 Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used in many of this library's examples.
 
 &nbsp;
+
+<hr>
 
 ### Button
 
@@ -177,6 +283,8 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 &nbsp;
 
+<hr>
+
 ### Deep Sleep
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
@@ -188,11 +296,15 @@ In deep sleep, with this library, according my multimeter power consumption drop
 
 &nbsp;
 
+<hr>
+
 ### LED
 
 The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led()` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
 
 &nbsp;
+
+<hr>
 
 ### Battery
 
@@ -215,6 +327,8 @@ The library contains all the tools to measure your own curve and use it instead,
 
 &nbsp;
 
+<hr>
+
 ### Ve - external power
 
 There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
@@ -224,6 +338,8 @@ On the stick, this is also what powers the OLED display. This libary turns it on
 > _(Not that they told anyone they hooked the display to "external power", so that's one afternoon I will never get back.)_
 
 &nbsp;
+
+<hr>
 
 ### Built-in temperature sensor
 
@@ -241,10 +357,11 @@ The ESP32 has an internal temperature sensor.  Our measurement function picks th
 80°C  | 100°C | < 2°C
 100°C | 125°C | < 3°C
 
-In scenarios where there's a lot of deep sleep, make sure you get your measurement right after boot and it might be a decent proxy for ambient temperature.
-
+In scenarios where there's a lot of deep sleep, if you make sure you get your measurement right after boot it might even reflect ambient temperature.
 
 &nbsp;
+
+<hr>
 
 &nbsp;
 
@@ -294,6 +411,8 @@ void loop() {
 For a more meaningful demo, especially if you have two of these boards, [check out `LoRa_rx_tx`](examples/display_and_radio/LoRa_rx_tx/LoRa_rx_tx.ino) in the examples. The [`LoRaWAN_TTN` example](examples/display_and_radio/LoRaWAN_TTN/LoRaWAN_TTN.ino) works, uses [The Things Network](https://www.thethingsnetwork.org/) and goes to deep sleep between sends.
 
 &nbsp;
+
+<hr>
 
 ## Quick Reference
 
@@ -375,6 +494,14 @@ instances
 ![](images/Heltec_Wireless_Stick_v3_pinout.jpg)
 
 [![](images/Heltec_Wireless_Stick_v3_schematic.png)](images/Heltec_Wireless_Stick_v3_schematic.pdf)
+
+&nbsp;
+
+### Heltec Wireless Stick Lite v3 / HTIT-WSL_v3 / "the stick lite"
+
+![](images/Heltec_Wireless_Stick_Lite_v3_pinout.png)
+
+[![](images/Heltec_Wireless_Stick_Lite_v3_schematic.png)](https://github.com/ropg/heltec_esp32_lora_v3/blob/main/images/Heltec_Wireless_Stick_Lite_v3_schematic.pdf)
 
 &nbsp;
 
