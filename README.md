@@ -30,7 +30,7 @@ First of all let's be clear what hardware we are talking about here. There is so
 **8 MB** SPI flash<br>
 USB-C, **CP2102** USB serial chip<br>
 Semtech **SX1262** sub-GHz transceiver<br>
-3.7V LiPo battery charging circuit<br>
+3.7V LiPo battery charging circuit
 
 </td>
 
@@ -104,15 +104,15 @@ Metal shielding
 
 <tr><td align="center" valign="top" colspan="2">
 
-Built-in Wifi antenna
+Built-in Wifi antenna<br>
 LoRa antenna connector IPEX1.0
 
 
 </td>
 <td align="center" valign="top">
 
-Built-in Wifi antenna
-WiFi ant. conn. IPEX1.0 (right)
+Built-in Wifi antenna<br>
+WiFi ant. conn. IPEX1.0 (right)<br>
 LoRa ant. conn. IPEX1.0 (left)
 
 </td>
@@ -170,7 +170,7 @@ If you use the "official" board definitions, everything will work also, except y
 
 ### Getting started
 
-First, install this library if you haven't already, either by hitting "Install" from the Arduino IDE's library manager or by copying the files in this repository to your Arduino libraries directory.
+First, install this library if you haven't already, either by hitting "Install" from the Arduino IDE's library manager or by copying this repository to your Arduino `libraries` directory.
 
 Then, in your sketches, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
@@ -275,7 +275,7 @@ The user button marked 'PRG' on the regular board and 'USER' on the stick is han
 
 Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your button gets updated so you can use these functions.
 
-##### Using it as the power button
+#### Using it as the power button
 
 If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec.h>`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
 
@@ -505,5 +505,5 @@ instances
 
 &nbsp;
 
-***If you read this far, would you please star this repository?***
+***If you read this far, would you please star this repository?***  <br>
 *(Not so much for my ego, but it helps other people find it. Thanks!)*
