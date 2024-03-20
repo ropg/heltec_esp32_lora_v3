@@ -214,7 +214,7 @@ Next to the radio examples in this library, all [RadioLib examples](https://gith
 
 &nbsp;
 
-##### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
+#### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
 
 This library provides convenience macros when calling RadioLib functions. It can be used for those functions that return a status code. When your code calls
 
@@ -225,7 +225,6 @@ this gets translated into
 
 ```cpp
   _radiolib_status = radio.setFrequency(866.3);
-  _radiolib_status = action;
   Serial.print("[RadioLib] ");
   Serial.print("radio.setFrequency(866.3)");
   Serial.print(" returned ");
