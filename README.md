@@ -118,11 +118,13 @@ LoRa ant. conn. IPEX1.0 (left)
 </td>
 </tr>
 
+<tr><td align="center" valign="top"><b>147 µA</b> (button wakes)<br><b>24 µA</b> (clock wakes)</td><td align="center" valign="top"><b>141 µA</b> (button wakes)<br><b>24 µA</b> (clock wakes)</td><td align="center" valign="top"><b>130 µA</b> (button wakes)<br><b>17 µA</b> (clock wakes)</td></tr> 
+
 </table>
 
 &nbsp;
 
-This library is unlikely to work as is with any other devices, whether made by Heltec or by others. You may be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is only known to work with the boards picture above**. For purposes of clarity, I might speak about "the regular board", "the stick" and "the stick lite" to mean the supported devices.`
+This library is unlikely to work as is with any other devices, whether made by Heltec or by others. You may be able to modify it, or use ideas or whole chunks of code from it, but just **know that this library is only known to work with the boards picture above**. For purposes of clarity, I might speak about "the regular board", "the stick" and "the stick lite" to mean the supported devices.
 
 &nbsp;
 
@@ -160,7 +162,7 @@ Once that's done, you can go to the *"Tools / Board"* menu and select either of 
 
 #### Not using my board definitions? `#define HELTEC_WIRELESS_STICK`
 
-If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you.
+If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you. If you have the stick lite, put `#define HELTEC_WIRELESS_STICK_LITE` before including this library to skip anything related to the display.
 
 > * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
