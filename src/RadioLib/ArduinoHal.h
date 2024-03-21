@@ -15,14 +15,6 @@
 
 #include <SPI.h>
 
-#if !defined(RADIOLIB_EEPROM_UNSUPPORTED)
-  #if defined(RADIOLIB_ESP32)
-    #include "utils/ESP32_RTC_EEPROM.h"
-  #else
-    #include <EEPROM.h>
-  #endif
-#endif
-
 /*!
   \class ArduinoHal
   \brief Arduino default hardware abstraction library implementation.
@@ -58,9 +50,6 @@ class ArduinoHal : public RadioLibHal {
     void spiTransfer(uint8_t* out, size_t len, uint8_t* in) override;
     void spiEndTransaction() override;
     void spiEnd() override;
-
-    void readPersistentStorage(uint32_t addr, uint8_t* buff, size_t len) override;
-    void writePersistentStorage(uint32_t addr, uint8_t* buff, size_t len) override;
 
     // implementations of virtual RadioLibHal methods
     void init() override;

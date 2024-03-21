@@ -114,49 +114,6 @@ void inline ArduinoHal::spiEnd() {
   spi->end();
 }
 
-void ArduinoHal::readPersistentStorage(uint32_t addr, uint8_t* buff, size_t len) {
-  #if !defined(RADIOLIB_EEPROM_UNSUPPORTED)
-    #if defined(RADIOLIB_ESP32) || defined(ARDUINO_ARCH_RP2040)
-      EEPROM.begin(RADIOLIB_HAL_PERSISTENT_STORAGE_SIZE);
-    #elif defined(ARDUINO_ARCH_APOLLO3)
-      EEPROM.init();
-    #endif
-    for(size_t i = 0; i < len; i++) {
-      buff[i] = EEPROM.read(addr + i);
-    }
-    #if defined(RADIOLIB_ESP32) || defined(ARDUINO_ARCH_RP2040)
-      EEPROM.end();
-    #endif
-  #else
-    (void)addr;
-    (void)buff;
-    (void)len;
-  #endif
-}
-
-void ArduinoHal::writePersistentStorage(uint32_t addr, uint8_t* buff, size_t len) {
-  #if !defined(RADIOLIB_EEPROM_UNSUPPORTED)
-    #if defined(RADIOLIB_ESP32) || defined(ARDUINO_ARCH_RP2040)
-      EEPROM.begin(RADIOLIB_HAL_PERSISTENT_STORAGE_SIZE);
-    #elif defined(ARDUINO_ARCH_APOLLO3)
-      EEPROM.init();
-    #endif
-    for(size_t i = 0; i < len; i++) {
-      if(EEPROM.read(addr + i) != buff[i]) {  // only write if value is new
-        EEPROM.write(addr + i, buff[i]);
-      }
-    }
-    #if defined(RADIOLIB_ESP32) || defined(ARDUINO_ARCH_RP2040)
-      EEPROM.commit();
-      EEPROM.end();
-    #endif
-  #else
-    (void)addr;
-    (void)buff;
-    (void)len;
-  #endif
-}
-
 void inline ArduinoHal::tone(uint32_t pin, unsigned int frequency, unsigned long duration) {
   #if !defined(RADIOLIB_TONE_UNSUPPORTED)
     if(pin == RADIOLIB_NC) {
