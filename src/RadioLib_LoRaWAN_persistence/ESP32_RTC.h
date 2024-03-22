@@ -3,7 +3,7 @@
 
 #include "RadioLib/RadioLib.h"
 
-bool restorePersistence(LoRaWANNode node);
-bool savePersistence(LoRaWANNode node);
+bool restorePersistence(LoRaWANNode &node);
+bool savePersistence(LoRaWANNode &node);
 
 #endif
