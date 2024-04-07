@@ -11,8 +11,6 @@
 #ifndef heltec_h
 #define heltec_h
 
-#include "driver/temp_sensor.h"
-
 // 'PRG' Button
 #define BUTTON    GPIO_NUM_0
 // LED pin & PWM parameters
@@ -39,13 +37,7 @@
 #define SCL_OLED  GPIO_NUM_18
 #define RST_OLED  GPIO_NUM_21
 
-#ifdef HELTEC_WIRELESS_STICK_LITE
-  #define HELTEC_NO_DISPLAY
-#endif
-
-#ifdef HELTEC_NO_RADIOLIB
-  #define HELTEC_NO_RADIO_INSTANCE
-#else
+#ifndef HELTEC_NO_RADIOLIB
   #include "RadioLib/RadioLib.h"
   // make sure the power off button works when using RADIOLIB_OR_HALT
   // (See RadioLib_convenience.h)
@@ -61,6 +53,12 @@
 #endif
 
 #include "HotButton.h"
+
+#ifndef HELTEC_NO_RADIO_INSTANCE
+  #ifndef HELTEC_NO_RADIOLIB
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+  #endif
+#endif
 
 // Don't you just hate it when battery percentages are wrong?
 //
@@ -85,36 +83,32 @@ const uint8_t scaled_voltage[100] = {
   94, 90, 81, 80, 76, 73, 66, 52, 32, 7,
 };
 
-#ifndef HELTEC_NO_RADIO_INSTANCE
-  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
-#endif
+/**
+ * @class PrintSplitter
+ * @brief A class that splits the output of the Print class to two different
+ *        Print objects.
+ *
+ * The PrintSplitter class is used to split the output of the Print class to two
+ * different Print objects. It overrides the write() function to write the data
+ * to both Print objects.
+ */
+class PrintSplitter : public Print {
+  public:
+    PrintSplitter(Print &_a, Print &_b) : a(_a), b(_b) {}
+    size_t write(uint8_t c) {
+      a.write(c);
+      return b.write(c);
+    }
+    size_t write(const char* str) {
+      a.write(str);
+      return b.write(str);
+    }
+  private:
+    Print &a;
+    Print &b;
+};
 
 #ifndef HELTEC_NO_DISPLAY_INSTANCE
-  /**
-   * @class PrintSplitter
-   * @brief A class that splits the output of the Print class to two different
-   *        Print objects.
-   *
-   * The PrintSplitter class is used to split the output of the Print class to two
-   * different Print objects. It overrides the write() function to write the data
-   * to both Print objects.
-   */
-  class PrintSplitter : public Print {
-    public:
-      PrintSplitter(Print &_a, Print &_b) : a(_a), b(_b) {}
-      size_t write(uint8_t c) {
-        a.write(c);
-        return b.write(c);
-      }
-      size_t write(const char* str) {
-        a.write(str);
-        return b.write(str);
-      }
-    private:
-      Print &a;
-      Print &b;
-  };
-
   #ifdef HELTEC_WIRELESS_STICK
     #define DISPLAY_GEOMETRY GEOMETRY_64_32
   #else
@@ -139,11 +133,10 @@ HotButton button(BUTTON);
  */
 void heltec_led(int percent) {
   if (percent > 0) {
-    ledcSetup(LED_CHAN, LED_FREQ, LED_RES);
-    ledcAttachPin(LED_PIN, LED_CHAN);
+    ledcAttach(LED_PIN, LED_FREQ, LED_RES);
     ledcWrite(LED_CHAN, percent * 255 / 100);
   } else {
-    ledcDetachPin(LED_PIN);
+    ledcDetach(LED_PIN);
     pinMode(LED_PIN, INPUT);
   }
 }
@@ -288,40 +281,6 @@ bool heltec_wakeup_was_timer() {
 }
 
 /**
- * @brief Measures esp32 chip temperature
- * 
- * @return float with temperature in degrees celsius.
-*/
-float heltec_temperature(){
-  // We start with the coldest range, because those temps get spoiled 
-  // the quickest by heat of processor waking up. 
-  temp_sensor_dac_offset_t offsets[5] = {
-    TSENS_DAC_L4,   // (-40°C ~  20°C, err <3°C)
-    TSENS_DAC_L3,   // (-30°C ~  50°C, err <2°C)
-    TSENS_DAC_L2,   // (-10°C ~  80°C, err <1°C)
-    TSENS_DAC_L1,   // ( 20°C ~ 100°C, err <2°C)
-    TSENS_DAC_L0    // ( 50°C ~ 125°C, err <3°C)
-  };
-
-  // If temperature for given n below this value,
-  // then this is the best measurement we have.
-  int cutoffs[5] = { -30, -10, 80, 100, 2500 };
-
-  float result = 0;
-  for (int n = 0; n < 5; n++) {
-    temp_sensor_config_t temp_sensor = TSENS_CONFIG_DEFAULT();
-    temp_sensor.dac_offset = offsets[n];
-    temp_sensor_set_config(temp_sensor);
-    temp_sensor_start();
-    temp_sensor_read_celsius(&result);
-    temp_sensor_stop();
-    // Serial.printf("L%d: %f°C\n", 4 - n, result);
-    if (result < cutoffs[n]) break;
-  }
-  return result;
-}
-
-/**
  * @brief Initializes the Heltec library.
  *
  * This function should be the first thing in setup() of your sketch. It
@@ -352,10 +311,8 @@ void heltec_loop() {
   #ifdef HELTEC_POWER_BUTTON
     // Power off button checking
     if (button.pressedFor(1000)) {
-      #ifndef HELTEC_NO_DISPLAY_INSTANCE
-        // Visually confirm it's off so user releases button
-        display.displayOff();
-      #endif
+      // Visually confirm it's off so user releases button
+      display.displayOff();
       // Deep sleep (has wait for release so we don't wake up immediately)
       heltec_deep_sleep();
     }
