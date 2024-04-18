@@ -201,7 +201,7 @@ Get-Content "$from\boards-ht_u.txt" | Add-Content "$to\boards.txt"
 
 Start Arduino IDE and from the board dropdown select "Select another board and port" and enter "ht_u" in the search box. My three board definitions, whose names now start with ht_u (Heltec Unofficial) should show up.
 
-![](images/select_board.png){: width="40%"}
+<img src="images/select_board.png" width="400">
 
 ### Not using these board definitions?
 
