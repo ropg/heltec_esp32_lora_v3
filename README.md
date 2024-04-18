@@ -6,7 +6,7 @@
 
 <p align="right"><kbd><b><a href="#quick-reference">Quick Reference</a></b></kbd></p>
 
-### Introduction
+## Introduction
 
 There's this Chinese company named Heltec, and they make a cool little development board that has an Espressif ESP32S3 (which has WiFi and Bluetooth), a 128x64 pixel OLED display and an SX1262 863-928 MHz radio on it. It sells under different names on the internet, but internally they call it **[HTIT-WB32LA](images/heltec_esp32_lora_v3_documentation.pdf)**. (They have a 470-510 MHz version also, called HTIT-WB32LAF.) The hardware is cool, the software that comes with it is not so much my taste. There's multiple GitHub repositories, it's initailly unclear what is what, they use some radio stack of unknown origin, code-quality and documentation varies, some examples need tinkering and what could be a cool toy could easily become a very long weekend of frustration before things sort of work.
 
@@ -16,7 +16,7 @@ This library allows you to use that time to instead play with this cool board. T
 
 <hr>
 
-### The great Heltec board confusion
+## The great Heltec board confusion
 
 First of all let's be clear what hardware we are talking about here. There is some level of general confusion when it comes to Heltec devices. They make a bewildering array of stuff, and it's not always clear (to me at least) what they call certain pieces of hardware and what specs this hardware has. This library is made to work with the devices pictured below. Their names all end in "v3".
 
@@ -130,51 +130,92 @@ This library is unlikely to work as is with any other devices, whether made by H
 
 <hr>
 
-### Setting up - Board Definitions
+## Setting up - Board Definitions
 
-Normally, the starting point for making software for a piece of hardware is selecting the board from the "Arduino board manager". If your board isn't an original AVR Arduino, (such as any ESP32-based board, you might need to add a "Board Manager URL" in the Arduino IDE. Espressif maintains a long list of ESP32-based boards with their board definition files.
+Normally, the starting point for making software for a piece of hardware is selecting the board from the "Arduino board manager". If your board isn't an original AVR Arduino, such as any ESP32-based board, you might need to add a "Board Manager URL" in the Arduino IDE. Espressif maintains a long list of ESP32-based boards with their board definition files.
 
-#### However ...
+### However ...
 
 Heltec publishes board definitions, both on their own URL which is in some of their documentation and in the (identical) definitions for their products as spread by Espressif. However, these do not let you select a partition table. That's right: if you use their definitions, you **cannot** change partition tables. Definitions for some of their other products do allow for selecting different partition tables, but then they offer a variety of tables for the wrong-size flash chip and leave out some of the right ones. But for these two boards the option is simply just gone from the *"Tools"* menu. My current guess is they didn't plan to do this: somebody just fat-fingered a copy-paste in the `boards.txt` file. But never mind why, let's fix it.
 
-#### Using my board definitions
+&nbsp;
 
-I've created my own board definitions for these boards. To use them, start the Arduino IDE, go to "Settings" and add the following URL to the *"Additional board manager URLs"* field:
+### Installing the board; the procedure
+
+#### 1. Install this library
+
+Use the library manager to install this library. Find it by entering "heltec_esp32" in the library manager search box.
+
+#### 2. Add ESP32 URL to settings
 
 ```
-https://ropg.github.io/heltec_boards/boards.json
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 ```
-
-*(Make sure any URLs that are there are sperated by commas. If you hit OK the IDE will then load the files needed.)*
 
 ![](images/board_manager_url.png)
 
-Once that's done, you can go to the *"Tools / Board"* menu and select either of our two supported boards from the *"Heltec (unofficial)"* sub-menu.
+to the additional board manager URL to the Settings of the Arduino IDE. 
 
-![](images/tools_board.png)
+> *(Make sure this and any URLs that might be already there are sperated by commas. If you hit OK the IDE will then load the files needed.)*
 
-&nbsp;
+> *Also make sure you remove from that field the board manager URL that starts with ropg.github.io if you added that previously because you used a previous version of this library*
 
-> * _Now if you were to say that it's a bit wasteful to install a copy of the entire ESP32 toolchain just because some manufacturer has silly board definitions, I would agree. I did take out the toolchains for the ESP32 variants not in use here, so it's "only" 80 MB instead of 250. Yes, there needs to be a more granular mechanism to tinker with board definitions._
+#### 3. Install ESP32
 
-&nbsp;
+Go to board manager and install "esp32 by Espressif Systems". At the time of writing this, the latest version is 2.0.15. If a newer versions exists, use it, but chnage the 2.0.15 in the commands you use below.
 
-#### Not using my board definitions? `#define HELTEC_WIRELESS_STICK`
+#### 4. Quit the Arduino IDE
+
+#### 5. Adding and changing files
+
+Now we have to copy some files from the directory where this library sits to the hardware directory that holds the board definitions. In addition, we append the contents of one file to the end of a file called boards.txt. To do this, we first have to find where this library is and where the ESP32 hardware definitions are stored.
+
+Here's the shell scripts to do this for the three major operating systems. Before executing these commands, make sure the directories we name `from` and `to` actually exist.
+
+**MacOS:**
+```
+from=~/Documents/Arduino/libraries/Heltec_ESP32_LoRa_v3/boards
+to=~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15
+cp -r $from/variants/* $to/variants/
+cat $from/boards-ht_u.txt >> $to/boards.txt
+```
+
+**Linux:**
+
+```
+from=~/Arduino/libraries/Heltec_ESP32_LoRa_v3/boards
+to=~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15
+cp -r $from/variants/* $to/variants/
+cat $from/boards-ht_u.txt >> $to/boards.txt
+```
+
+**Windows PowerShell:**
+```
+$from = "~\Documents\Arduino\libraries\Heltec_ESP32_LoRa_v3\boards"
+$to = "~\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.15"
+Copy-Item -Path "$from\variants\*" -Destination "$to\variants\" -Recurse -Force
+Get-Content "$from\boards-ht_u.txt" | Add-Content "$to\boards.txt"
+```
+
+#### 6. Select one of the new boards
+
+Start Arduino IDE and from the board dropdown select "Select another board and port" and enter "ht_u" in the search box. My three board definitions, whose names now start with ht_u (Heltec Unofficial) should show up.
+
+![](images/select_board.png){: width="40%"}
+
+### Not using these board definitions?
+
+`#define HELTEC_WIRELESS_STICK`
 
 If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you. If you have the stick lite, put `#define HELTEC_WIRELESS_STICK_LITE` before including this library to skip anything related to the display.
 
 > * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
-&nbsp;
-
 <hr>
 
-### Getting started
+## Getting started
 
-First, install this library if you haven't already, either by hitting "Install" from the Arduino IDE's library manager or by copying this repository to your Arduino `libraries` directory.
-
-Then, in your sketches, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+To use this library, in your sketches, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
 #include <heltec.h>
@@ -201,7 +242,7 @@ void loop() {
 
 <hr>
 
-### RadioLib
+## RadioLib
 
 <kbd><b><a href="https://jgromes.github.io/RadioLib/">API documentation</a></b></kbd>
 
@@ -216,7 +257,7 @@ Next to the radio examples in this library, all [RadioLib examples](https://gith
 
 &nbsp;
 
-#### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
+### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
 
 This library provides convenience macros when calling RadioLib functions. It can be used for those functions that return a status code. When your code calls
 
@@ -252,7 +293,7 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 <hr>
 
-### Display
+## Display
 
 <kbd><b><a href="https://github.com/ThingPulse/esp8266-oled-ssd1306#api">API documentation</a></b></kbd>
 
@@ -260,7 +301,7 @@ The tiny OLED display uses the same library that the original library from Helte
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
-#### Printing to both Serial and display: `both.print()`
+### Printing to both Serial and display: `both.print()`
 
 Instead of using `print`, `println` or `printf` on either `Serial` or `display`, you can also print to `both`. As the name implies, this prints the same thing on both devices. You'll find it used in many of this library's examples.
 
@@ -268,7 +309,7 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 
 <hr>
 
-### Button
+## Button
 
 <kbd><b><a href="https://github.com/ropg/HotButton">API documentation</a></b></kbd>
 
@@ -276,7 +317,7 @@ The user button marked 'PRG' on the regular board and 'USER' on the stick is han
 
 Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your button gets updated so you can use these functions.
 
-#### Using it as the power button
+### Using it as the power button
 
 If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec.h>`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
 
@@ -286,7 +327,7 @@ If you hook up this board to power, and especially if you hook up a LiPo battery
 
 <hr>
 
-### Deep Sleep
+## Deep Sleep
 
 You can use `heltec_deep_sleep(<seconds>)` to put the board into this 'off' deep sleep state yourself. This will put the board in deep sleep for the specified number of seconds. After it wakes up, it will run your sketch from the start again. You can use `heltec_wakeup_was_button()` and `heltec_wakeup_was_timer()` to find out whether the wakeup was caused by the power button or because your specified time has elapsed. You can even hold on to some data in variables that survive deep sleep by tagging them `RTC_DATA_ATTR`. More is in [this tutorial](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/).
 
@@ -299,7 +340,7 @@ In deep sleep, with this library, according my multimeter power consumption drop
 
 <hr>
 
-### LED
+## LED
 
 The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led()` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
 
@@ -307,7 +348,7 @@ The board has a bright white LED, next to the orange power/charge LED. This libr
 
 <hr>
 
-### Battery
+## Battery
 
 The board is capable of charging a LiPo battery connected to the little 2-pin connector at the bottom. `heltec_vbat()` gives you a float with the battery voltage, `heltec_battery_percent()` provides the estimated percentage full.
 
@@ -330,7 +371,7 @@ The library contains all the tools to measure your own curve and use it instead,
 
 <hr>
 
-### Ve - external power
+## Ve - external power
 
 There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
 
@@ -342,7 +383,7 @@ On the stick, this is also what powers the OLED display. This libary turns it on
 
 <hr>
 
-### Built-in temperature sensor
+## Built-in temperature sensor
 
 ```cpp
 float temp = heltec_temperature();
