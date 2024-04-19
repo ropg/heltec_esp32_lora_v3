@@ -1,8 +1,8 @@
 // Turns the 'PRG' button into the power button, long press is off 
-#define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
+#define HELTEC_POWER_BUTTON   // must be before "#include <heltec_unofficial.h>"
 
 // creates 'radio', 'display' and 'button' instances 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 void setup() {
   heltec_setup();

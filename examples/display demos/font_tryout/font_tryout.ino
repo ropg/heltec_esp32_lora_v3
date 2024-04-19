@@ -8,7 +8,7 @@
 */
 
 #define HELTEC_POWER_BUTTON
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 #include "Dialog_plain_8.h"
 #include "Dialog_plain_7.h"

@@ -4,17 +4,17 @@
  * This will output elapsed time since boot and battery voltage, both to
  * a party connecting via telnet and to the serial port. It is meant to
  * create a time-series to create the voltage curve of the battery as
- * used in heltec.h to estimate battery percentage remaining.
+ * used in heltec_unofficial.h to estimate battery percentage remaining.
  * 
  * (It's a telnet server because you can't discharge the battery with
  * USB-C plugged in.)
  * 
  * Save the resulting data and provide to the python script in src/tools
- * to get the constants in heltec.h. The discharge curve I used is in
+ * to get the constants in heltec_unofficial.h. The discharge curve I used is in
  * the same directory.
 */
 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 #include <WiFi.h>
 #include "ESPTelnet.h"
 

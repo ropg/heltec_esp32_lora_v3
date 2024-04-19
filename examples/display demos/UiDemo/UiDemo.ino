@@ -3,7 +3,7 @@
  * 
 */
 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 /**
    The MIT License (MIT)

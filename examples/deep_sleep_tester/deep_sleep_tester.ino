@@ -11,7 +11,7 @@
  * USB-C is disconnected.
 */
 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 bool buttonWake = false;
 bool clockWake  = false;

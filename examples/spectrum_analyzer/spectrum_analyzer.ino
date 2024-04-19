@@ -12,8 +12,8 @@
 // #define MINOR_TICKS 5
 
 // Turns the 'PRG' button into the power button, long press is off 
-#define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
-#include <heltec.h>
+#define HELTEC_POWER_BUTTON   // must be before "#include <heltec_unofficial.h>"
+#include <heltec_unofficial.h>
 
 // This file contains binary patch for the SX1262
 #include "RadioLib/modules/SX126x/patches/SX126x_patch_scan.h"

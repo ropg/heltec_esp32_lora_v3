@@ -5,7 +5,7 @@
 
 // Example does not work with the Wireless Stick v3
 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 /**
    The MIT License (MIT)

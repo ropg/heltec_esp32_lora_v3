@@ -73,7 +73,7 @@ DHT dht(DHTPIN, DHTTYPE);
 #define FPORT 10
 
 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 // create the node instance on the EU-868 band using the radio module and the
 // encryption key make sure you are using the correct band based on your

@@ -1,5 +1,5 @@
 /**
- * @file heltec.h
+ * @file heltec_unofficial.h
  * @brief Header file for the Heltec library.
  *
  * This file contains the definitions and declarations for the Heltec library.

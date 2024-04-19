@@ -12,8 +12,8 @@
 
 
 // Turns the 'PRG' button into the power button, long press is off 
-#define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
-#include <heltec.h>
+#define HELTEC_POWER_BUTTON   // must be before "#include <heltec_unofficial.h>"
+#include <heltec_unofficial.h>
 
 // Pause between transmited packets in seconds.
 // Set to zero to only transmit a packet when pressing the user button

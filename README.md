@@ -207,7 +207,7 @@ Start Arduino IDE and from the board dropdown select "Select another board and p
 
 `#define HELTEC_WIRELESS_STICK`
 
-If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec.h>` or things will not work for you. If you have the stick lite, put `#define HELTEC_WIRELESS_STICK_LITE` before including this library to skip anything related to the display.
+If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec_unofficial.h>` or things will not work for you. If you have the stick lite, put `#define HELTEC_WIRELESS_STICK_LITE` before including this library to skip anything related to the display.
 
 > * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
@@ -215,10 +215,10 @@ If you use the "official" board definitions, everything will work also, except y
 
 ## Getting started
 
-To use this library, in your sketches, `#include <heltec.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
+To use this library, in your sketches, `#include <heltec_unofficial.h>`. This will provide the display, radio and button instances. Then in your `setup()`, put `heltec_setup()` to initialize the serial port at 115.200 bps and initialize the display. In the `loop()` part of your sketch, put `heltec_loop()`. This will make sure the button is scanned, and provides the [deep sleep "off"](#using-it-as-the-power-button) functionality if you set that up.
 
 ```cpp
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 void setup() {
   heltec_setup();
@@ -235,7 +235,7 @@ void loop() {
 
 &nbsp;
 
-> * _If you `#define HELTEC_NO_RADIO_INSTANCE` and/or `#define HELTEC_NO_DISPLAY_INSTANCE` before `#include <heltec.h>`, you get no instances of `radio` and/or `display`, so you can set these up manually. Note that the library then also doesn't turn things off at sleep, etc._
+> * _If you `#define HELTEC_NO_RADIO_INSTANCE` and/or `#define HELTEC_NO_DISPLAY_INSTANCE` before `#include <heltec_unofficial.h>`, you get no instances of `radio` and/or `display`, so you can set these up manually. Note that the library then also doesn't turn things off at sleep, etc._
 > * _If you would prefer these libraries not even be included, use `#define NO_RADIOLIB` and `#define NO_DISPLAY` respectively._
 
 &nbsp;
@@ -250,10 +250,10 @@ void loop() {
 
 This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com/ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to have a more generic mechanism allowing for the retention of state information and as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
 
-Next to the radio examples in this library, all [RadioLib examples](https://github.com/jgromes/RadioLib/tree/master/examples) that work with an SX1262 work here. Simply `#include <heltec.h>` instead of RadioLib and remove any code that creates a `radio` instance, it already exists when you include this library.
+Next to the radio examples in this library, all [RadioLib examples](https://github.com/jgromes/RadioLib/tree/master/examples) that work with an SX1262 work here. Simply `#include <heltec_unofficial.h>` instead of RadioLib and remove any code that creates a `radio` instance, it already exists when you include this library.
 
 > * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` (my board definitions have it as both) and much of their own software as DIO0. The SX1262 IO pins start at DIO1._
-> * _If you place `#define HELTEC_NO_RADIOLIB` before `#include <heltec.h>`, RadioLib will not be included and this library won't create a radio object. Handy if you are not using the radio and need the space in flash for something else or if you want to use another radio library or so._
+> * _If you place `#define HELTEC_NO_RADIOLIB` before `#include <heltec_unofficial.h>`, RadioLib will not be included and this library won't create a radio object. Handy if you are not using the radio and need the space in flash for something else or if you want to use another radio library or so._
 
 &nbsp;
 
@@ -319,7 +319,7 @@ Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your 
 
 ### Using it as the power button
 
-If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec.h>`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
+If you hook up this board to power, and especially if you hook up a LiPo battery (see below), you'll notice there's no on/off switch. Luckily the ESP32 comes with a very low-power "deep sleep" mode where it draws so little current it can essentially be considered off. Since signals on GPIO pins can wake it back up, we can use the button on the board as a power switch. In your sketch, simply put **`#define HELTEC_POWER_BUTTON`** before `#include <heltec_unofficial.h>`, make sure `heltec_loop()` is in your own `loop()` and then a button press will wake it up and a long press will turn it off. You can still use `button.isSingleClick()` and `button.isDoubleClick()` in your `loop()` function when you use it as a power button.
 
 > * _If you use `delay()` in your code, the power off function will not work during that delay. To fix that, simply use **`heltec_delay()`** instead._
 
@@ -365,7 +365,7 @@ The battery percentage estimate in this library is based on a real LiPo discharg
 
 ![](/images/battery_curve.png)
 
-The library contains all the tools to measure your own curve and use it instead, see [`heltec.h`](src/heltec.h) for details.
+The library contains all the tools to measure your own curve and use it instead, see [`heltec_unofficial.h`](src/heltec_unofficial.h) for details.
 
 &nbsp;
 
@@ -375,7 +375,7 @@ The library contains all the tools to measure your own curve and use it instead,
 
 There's two pins marked 'Ve' that are wired together and connected to a GPIO-controlled FET that can source 350 mA at 3.3V to power sensors etc. Turn on by calling `heltec_ve(true)`, `heltec_ve(false)` turns it off.
 
-On the stick, this is also what powers the OLED display. This libary turns it on when initializing when you have set `#define HELTEC_WIRELESS_STICK` before `#include <heltec.h>`
+On the stick, this is also what powers the OLED display. This libary turns it on when initializing when you have set `#define HELTEC_WIRELESS_STICK` before `#include <heltec_unofficial.h>`
 
 > _(Not that they told anyone they hooked the display to "external power", so that's one afternoon I will never get back.)_
 
@@ -411,13 +411,13 @@ In scenarios where there's a lot of deep sleep, if you make sure you get your me
 
 ```cpp
 // Turns the 'PRG' button into the power button, long press is off 
-#define HELTEC_POWER_BUTTON   // must be before "#include <heltec.h>"
+#define HELTEC_POWER_BUTTON   // must be before "#include <heltec_unofficial.h>"
 
 // Uncomment this if you have Wireless Stick v3
 // #define HELTEC_WIRELESS_STICK
 
 // creates 'radio', 'display' and 'button' instances 
-#include <heltec.h>
+#include <heltec_unofficial.h>
 
 void setup() {
   heltec_setup();
@@ -458,7 +458,7 @@ For a more meaningful demo, especially if you have two of these boards, [check o
 
 ## Quick Reference
 
-Here's a list of everything previous. Everything is clickable for more information. Remember these defines only work if they occur before `#include <heltec.h>`
+Here's a list of everything previous. Everything is clickable for more information. Remember these defines only work if they occur before `#include <heltec_unofficial.h>`
 
 <table>
 <tr><th align="left"> 
