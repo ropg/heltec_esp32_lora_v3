@@ -46,7 +46,7 @@
 #ifdef HELTEC_NO_RADIOLIB
   #define HELTEC_NO_RADIO_INSTANCE
 #else
-  #include "RadioLib/RadioLib.h"
+  #include "RadioLib.h"
   // make sure the power off button works when using RADIOLIB_OR_HALT
   // (See RadioLib_convenience.h)
   #define RADIOLIB_DO_DURING_HALT heltec_delay(10)

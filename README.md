@@ -246,10 +246,6 @@ void loop() {
 
 <kbd><b><a href="https://jgromes.github.io/RadioLib/">API documentation</a></b></kbd>
 
-
-
-This library includes my [fork of RadioLib](https://github.com/ropg/RadioLib). This is because that fork uses my [ESP32_RTC_EEPROM](https://github.com/ropg/ESP32_RTC_EEPROM) when compiled on ESP32, allowing for much less wear on the ESP32 flash. RadioLib plans to have a more generic mechanism allowing for the retention of state information and as soon as that's in there, this library will depend on (and thus auto-install) the latest version of RadioLib instead of including a copy of it. As long as this uses my fork, make sure the original version of RadioLib is uninstalled to avoid the compiler getting confused.
-
 Next to the radio examples in this library, all [RadioLib examples](https://github.com/jgromes/RadioLib/tree/master/examples) that work with an SX1262 work here. Simply `#include <heltec_unofficial.h>` instead of RadioLib and remove any code that creates a `radio` instance, it already exists when you include this library.
 
 > * _It might otherwise confuse you at some point: while Heltec wired the DIO1 line from the SX1262 to the ESP32 (as they should, it is the interrupt line), they labeled it in their `pins_arduino.h` (my board definitions have it as both) and much of their own software as DIO0. The SX1262 IO pins start at DIO1._

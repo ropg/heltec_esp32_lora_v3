@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "RadioLib/RadioLib.h"
+#include "RadioLib.h"
 
 int16_t _radiolib_status;
 
