@@ -56,8 +56,8 @@
 #ifdef HELTEC_NO_DISPLAY
   #define HELTEC_NO_DISPLAY_INSTANCE
 #else
-  #include "display/SSD1306Wire.h"
-  #include "display/OLEDDisplayUi.h"
+  #include "SSD1306Wire.h"
+  #include "OLEDDisplayUi.h"
 #endif
 
 #include "HotButton.h"
@@ -120,7 +120,7 @@ const uint8_t scaled_voltage[100] = {
   #else
     #define DISPLAY_GEOMETRY GEOMETRY_128_64
   #endif
-  SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, RST_OLED, DISPLAY_GEOMETRY);
+  SSD1306Wire display(0x3c, SDA_OLED, SCL_OLED, DISPLAY_GEOMETRY);
   PrintSplitter both(Serial, display);
 #else
   Print &both = Serial;
@@ -321,6 +321,30 @@ float heltec_temperature(){
   return result;
 }
 
+void heltec_display_power(bool on) {
+  #ifndef HELTEC_NO_DISPLAY_INSTANCE
+    if (on) {
+      #ifdef HELTEC_WIRELESS_STICK
+        // They hooked the display to "external" power, and didn't tell anyone
+        heltec_ve(true);
+        delay(5);
+      #endif
+      pinMode(RST_OLED, OUTPUT);
+      digitalWrite(RST_OLED, HIGH);
+      delay(1);
+      digitalWrite(RST_OLED, LOW);
+      delay(20);
+      digitalWrite(RST_OLED, HIGH);
+    } else {
+      #ifdef HELTEC_WIRELESS_STICK
+        heltec_ve(false);
+      #else
+        display.displayOff();
+      #endif
+    }
+  #endif
+}
+
 /**
  * @brief Initializes the Heltec library.
  *
@@ -330,11 +354,7 @@ float heltec_temperature(){
 void heltec_setup() {
   Serial.begin(115200);
   #ifndef HELTEC_NO_DISPLAY_INSTANCE
-    #ifdef HELTEC_WIRELESS_STICK
-      // They hooked the display to "external" power, and didn't tell anyone
-      heltec_ve(true);
-      delay(5);
-    #endif
+    heltec_display_power(true);
     display.init();
     display.setContrast(255);
     display.flipScreenVertically();
