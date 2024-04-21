@@ -19,6 +19,8 @@ This library allows you to use that time to instead play with this cool board. T
 > [!NOTE]  
 > Some larger changes have happened: among other things the library now depends on (which means it auto-installs) RadioLib and the display library. The name of the include file also changed from `heltec.h` to `heltec_unofficial.h` so that you can have it installed alongside the library made by heltec itself. Make sure you update existing code to reflect this change.
 
+&nbsp;
+
 <hr>
 
 ## The great Heltec board confusion
