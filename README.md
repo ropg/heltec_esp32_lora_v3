@@ -12,7 +12,12 @@ There's this Chinese company named Heltec, and they make a cool little developme
 
 This library allows you to use that time to instead play with this cool board. The examples are tested, and this library assumes that for all things sub-GHz, you want to use the popular RadioLib.
 
+*As for the name: if I had to name it today, this library would be called "Heltec Unofficial", which is the name of the include file. I named it after one of the names of the first of the currently supported boards. Library names are hard to change, so the name is what it is.*
+
 &nbsp;
+
+> [!NOTE]  
+> Some larger changes have happened: among other things the library now depends on (which means it auto-installs) RadioLib and the display library. The name of the include file also changed from `heltec.h` to `heltec_unofficial.h` so that you can have it installed alongside the library made by heltec itself. Make sure you update existing code to reflect this change.
 
 <hr>
 
