@@ -139,11 +139,19 @@ HotButton button(BUTTON);
  */
 void heltec_led(int percent) {
   if (percent > 0) {
-    ledcSetup(LED_CHAN, LED_FREQ, LED_RES);
-    ledcAttachPin(LED_PIN, LED_CHAN);
+    #if ESP_ARDUINO_VERSION_MAJOR == 3
+      ledcAttach(LED_PIN, LED_FREQ, LED_RES);
+    #else
+      ledcSetup(LED_CHAN, LED_FREQ, LED_RES);
+      ledcAttachPin(LED_PIN, LED_CHAN);
+    #endif
     ledcWrite(LED_CHAN, percent * 255 / 100);
   } else {
-    ledcDetachPin(LED_PIN);
+    #if ESP_ARDUINO_VERSION_MAJOR == 3
+      ledcDetach(LED_PIN);
+    #else
+      ledcDetachPin(LED_PIN);
+    #endif
     pinMode(LED_PIN, INPUT);
   }
 }
