@@ -3,10 +3,9 @@
  * and SNR for received packets on the little display.
  *
  * Note that while this send and received using LoRa modulation, it does not do
- * LoRaWAN, see the LoRaWAN_TTN example for that.
+ * LoRaWAN. For that, see the LoRaWAN_TTN example.
  *
- * This works on the stick, but the output on the screen looks ugly. I'll
- * probably make a separate version for it.
+ * This works on the stick, but the output on the screen gets cut off.
 */
 
 

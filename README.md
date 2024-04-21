@@ -287,6 +287,16 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 &nbsp;
 
+### LoRaWAN
+
+Using these Heltec chips, you can experiment with LoRaWAN networks such as [The Things Network](https://www.thethingsnetwork.org/). If create an account there and have a gateway somewhere nearby, you can send small binary messages that will show up at the designated server on the internet. You can make an account and use their servers to see your messages appear.
+
+Because of the limited throughput (a few small messages every once in a while) LoRaWAN is really most suitable for sensors, meter readings and things like that. To use it with the Heltec boards, you'd probable want to make the device go to deep sleep between readings, so the battery would last a nice long time.
+
+To speak LoRaWAN, you need to store some provisioning information such as identifiers and cryptographic keys. In addition to that, the RadioLib LoRaWAN code needs the user to hang on to some session state during long sleep to resume the same session. I wrote another library, called **[LoRaWAN_ESP32](https://github.com/ropg/LoRaWAN_ESP32)** to manage both the provisioning data and the session state in flash. Please refer to that library's README for more details.
+
+If you install LoRaWAN_ESP32, you can compile the example called [LoRaWAN_TTN](/examples/LoRaWAN_TTN/LoRaWAN_TTN.ino) that comes with this library to see it in action. (That example is nearly identical to the example that comes with LaRaWAN_ESP32, just set up to have this library provide the radio instance so that you could use the display or other features if you wanted to.)
+
 <hr>
 
 ## Display
@@ -299,7 +309,9 @@ The tiny OLED display uses the same library that the original library from Helte
 
 There's the primary display library and there's an additinal UI library that allows for multiple frames. The display examples will show you how things work. The library, courtesy of ThingPulse, is well-written and well-documented. [Check them out](https://thingpulse.com/) and buy their stuff.
 
-> *This library used to include a fork of the library that had improved `print` functionality, but all my changes have been upstreamed, so we're back to depending on the original.*
+> *This library used to include a fork of that library that had improved `print` functionality, but all my changes have been upstreamed, so we're back to depending on the original.*
+
+&nbsp;
 
 ### Printing to both Serial and display: `both.print()`
 
@@ -316,6 +328,8 @@ Instead of using `print`, `println` or `printf` on either `Serial` or `display`,
 The user button marked 'PRG' on the regular board and 'USER' on the stick is handled by my own HotButton library that is automatically installed when you install this one. Since we have only one button it makes sense to be able to do as many different things with it as possible. It provides the generic `button.isSingleClick()` and `button.isDoubleClick()`, but it can do much more than that. I recommed having a quick look at its (short) [documentation](https://github.com/ropg/HotButton) to see what it can do.
 
 Remember to put `heltec.loop()` in the`loop()` of your sketch to make sure your button gets updated so you can use these functions.
+
+&nbsp;
 
 ### Using it as the power button
 
