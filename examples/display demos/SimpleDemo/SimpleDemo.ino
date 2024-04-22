@@ -48,8 +48,7 @@ int demoMode = 0;
 int counter = 1;
 
 void setup() {
-  Serial.begin(115200);
-  Serial.println();
+  heltec_setup();
   Serial.println();
 
 
@@ -146,6 +145,7 @@ int demoLength = (sizeof(demos) / sizeof(Demo));
 long timeSinceLastModeSwitch = 0;
 
 void loop() {
+  heltec_loop();
   // clear the display
   display.clear();
   // draw the current demo method
