@@ -23,8 +23,6 @@
 #include <heltec_unofficial.h>
 #include <LoRaWAN_ESP32.h>
 
-#include "driver/temp_sensor.h"
-
 LoRaWANNode* node;
 
 RTC_DATA_ATTR uint8_t count = 0;
@@ -34,8 +32,8 @@ void setup() {
 
   // Obtain directly after deep sleep
   // May or may not reflect room temperature, sort of. 
-  float temp = ESP32_temp();
-  Serial.printf("Temperature: %.2f °C\n", temp);
+  float temp = heltec_temperature();
+  Serial.printf("Temperature: %.1f °C\n", temp);
 
   // initialize radio
   Serial.println("Radio init");
@@ -54,12 +52,11 @@ void setup() {
 
   // If we're still here, it means we joined, and we can send something
 
-
   // Manages uplink intervals to the TTN Fair Use Policy
   node->setDutyCycle(true, 1250);
 
   uint8_t uplinkData[2];
-  uplinkData[0] = count;
+  uplinkData[0] = count++;
   uplinkData[1] = temp + 100;
 
   uint8_t downlinkData[256];
@@ -92,41 +89,6 @@ void goToSleep() {
   uint32_t delayMs = max(interval, (uint32_t)MINIMUM_DELAY * 1000);
   Serial.printf("Next TX in %i s\n", delayMs/1000);
   delay(100);  // So message prints
-
-  esp_sleep_enable_timer_wakeup(delayMs * 1000);
-
-  // INSERT WHATEVER ELSE YOU NEED TO DO TO MINIMIZE POWER USAGE DURING SLEEP
-  
   // and off to bed we go
-  esp_deep_sleep_start();
-}
-
-
-// This gets the ESP32 chip temperature, automatically using the best
-// offset for the current temperature.
-float ESP32_temp() {
-  // We start with the coldest range, because those temps get spoiled 
-  // the quickest by heat of processor waking up. 
-  temp_sensor_dac_offset_t offsets[5] = {
-    TSENS_DAC_L4,   // (-40°C ~  20°C, err <3°C)
-    TSENS_DAC_L3,   // (-30°C ~  50°C, err <2°C)
-    TSENS_DAC_L2,   // (-10°C ~  80°C, err <1°C)
-    TSENS_DAC_L1,   // ( 20°C ~ 100°C, err <2°C)
-    TSENS_DAC_L0    // ( 50°C ~ 125°C, err <3°C)
-  };
-  // If temperature for given n below this value,
-  // then this is the best measurement we have.
-  int cutoffs[5] = { -30, -10, 80, 100, 2500 };
-  float result = 0;
-  for (int n = 0; n < 5; n++) {
-    temp_sensor_config_t temp_sensor = TSENS_CONFIG_DEFAULT();
-    temp_sensor.dac_offset = offsets[n];
-    temp_sensor_set_config(temp_sensor);
-    temp_sensor_start();
-    temp_sensor_read_celsius(&result);
-    temp_sensor_stop();
-    // Serial.printf("L%d: %f°C\n", 4 - n, result);
-    if (result < cutoffs[n]) break;
-  }
-  return result;
+  heltec_deep_sleep(delayMs/1000);
 }
