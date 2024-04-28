@@ -244,7 +244,7 @@ void heltec_deep_sleep(int seconds = 0) {
   #endif
   // Set timer wakeup if applicable
   if (seconds > 0) {
-    esp_sleep_enable_timer_wakeup(seconds * 1000000);
+    esp_sleep_enable_timer_wakeup((int64_t)seconds * 1000000);
   }
   // and off to bed we go
   esp_deep_sleep_start();
