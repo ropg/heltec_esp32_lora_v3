@@ -25,4 +25,5 @@ jobs:
     - name: Compile Sketches
       uses: arduino/compile-sketches@v1
       with:
-        fqbn: esp32:esp32:heltec_wifi_lora_32_V3
+        fqbn: esp32:esp32:esp32s3
+        # fqbn: esp32:esp32:heltec_wifi_lora_32_V3
