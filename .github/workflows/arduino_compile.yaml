@@ -14,9 +14,10 @@ jobs:
       uses: arduino/setup-arduino-cli@v1
 
     - name: Install Dependencies
-      uses: arduino/arduino-cli@v1
-      with:
-        cli-args: lib install HotButton RadioLib "ESP8266 and ESP32 OLED driver for SSD1306 displays"
+      run: |
+        arduino-cli lib install "HotButton"
+        arduino-cli lib install "RadioLib"
+        arduino-cli lib install "ESP8266 and ESP32 OLED driver for SSD1306 displays"
 
     - name: Compile Sketches
       uses: arduino/compile-sketches@v1
