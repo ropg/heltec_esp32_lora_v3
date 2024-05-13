@@ -58,7 +58,7 @@ void setup() {
 }
 
 void loop() {
-  uint64_t start = millis();
+  // uint64_t start = millis();
   // clear the scan plot rectangle
   display.setColor(BLACK);
   display.fillRect(0,0,STEPS, HEIGHT);
@@ -130,9 +130,10 @@ void displayDecorate() {
  * @param length The length of each tick in pixels.
  */
 void drawTicks(float every, int length) {
-  float first_tick  = FREQ_BEGIN + 
-                      (every - (FREQ_BEGIN - (int)(FREQ_BEGIN / every) * every)) + 
-                      first_tick < FREQ_BEGIN ? every : 0;
+  float first_tick  = FREQ_BEGIN + (every - (FREQ_BEGIN - (int)(FREQ_BEGIN / every) * every));
+  if (first_tick < FREQ_BEGIN){
+    first_tick += every;
+  }
   for (float tick_freq = first_tick; tick_freq <= FREQ_END; tick_freq += every) {
     int tick = round((tick_freq - FREQ_BEGIN) / SINGLE_STEP);
     display.drawLine(tick, HEIGHT + X_AXIS_WEIGHT, tick, HEIGHT + X_AXIS_WEIGHT + length);
