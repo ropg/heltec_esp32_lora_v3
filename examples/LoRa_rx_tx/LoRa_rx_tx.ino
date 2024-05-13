@@ -72,7 +72,7 @@ void loop() {
   if ((PAUSE && tx_legal && millis() - last_tx > (PAUSE * 1000)) || button.isSingleClick()) {
     // In case of button click, tell user to wait
     if (!tx_legal) {
-      both.printf("Legal limit, wait %" PRIu64 " sec.\n", ((minimum_pause - (millis() - last_tx)) / 1000) + 1);
+      both.printf("Legal limit, wait %i sec.\n", (int)((minimum_pause - (millis() - last_tx)) / 1000) + 1);
       return;
     }
     both.printf("TX [%s] ", String(counter).c_str());
@@ -83,7 +83,7 @@ void loop() {
     tx_time = millis() - tx_time;
     heltec_led(0);
     if (_radiolib_status == RADIOLIB_ERR_NONE) {
-      both.printf("OK (%i ms)\n", tx_time);
+      both.printf("OK (%i ms)\n", (int)tx_time);
     } else {
       both.printf("fail (%i)\n", _radiolib_status);
     }
