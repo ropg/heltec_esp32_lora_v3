@@ -87,7 +87,7 @@ const uint8_t scaled_voltage[100] = {
 
 #ifndef HELTEC_NO_RADIO_INSTANCE
   #ifndef ARDUINO_heltec_wifi_32_lora_V3
-    // Assume MISO and MOSI being wrong when noty using Heltec's board definition
+    // Assume MISO and MOSI being wrong when not using Heltec's board definition
     // and use hspi to make it work anyway. See heltec_setup() for the actual SPI setup.
     #include <SPI.h>
     SPIClass* hspi = new SPIClass(HSPI);
