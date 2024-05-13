@@ -16,7 +16,7 @@
 #include <heltec_unofficial.h>
 
 // This file contains binary patch for the SX1262
-#include "RadioLib/modules/SX126x/patches/SX126x_patch_scan.h"
+#include "modules/SX126x/patches/SX126x_patch_scan.h"
 
 // Prints the scan measurement bins from the SX1262 in hex
 // #define PRINT_SCAN_VALUES
