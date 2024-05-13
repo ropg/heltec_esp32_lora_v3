@@ -86,7 +86,16 @@ const uint8_t scaled_voltage[100] = {
 };
 
 #ifndef HELTEC_NO_RADIO_INSTANCE
-  SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+  #ifndef ARDUINO_heltec_wifi_32_lora_V3
+    // Assume MISO and MOSI being wrong when noty using Heltec's board definition
+    // and use hspi to make it work anyway. See heltec_setup() for the actual SPI setup.
+    #include <SPI.h>
+    SPIClass* hspi = new SPIClass(HSPI);
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa, *hspi);
+  #else
+    // Default SPI on pins from pins_arduino.h
+    SX1262 radio = new Module(SS, DIO1, RST_LoRa, BUSY_LoRa);
+  #endif
 #endif
 
 #ifndef HELTEC_NO_DISPLAY_INSTANCE
@@ -361,6 +370,9 @@ void heltec_display_power(bool on) {
  */
 void heltec_setup() {
   Serial.begin(115200);
+  #ifndef ARDUINO_heltec_wifi_32_lora_V3
+    hspi->begin(SCK, MISO, MOSI, SS);
+  #endif
   #ifndef HELTEC_NO_DISPLAY_INSTANCE
     heltec_display_power(true);
     display.init();
