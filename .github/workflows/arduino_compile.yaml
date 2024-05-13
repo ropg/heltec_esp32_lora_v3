@@ -1,0 +1,24 @@
+name: Compile Arduino Sketches
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
+
+    - name: Install Dependencies
+      uses: arduino/arduino-cli@v1
+      with:
+        cli-args: lib install HotButton RadioLib "ESP8266 and ESP32 OLED driver for SSD1306 displays"
+
+    - name: Compile Sketches
+      uses: arduino/compile-sketches@v1
+      with:
+        fqbn: esp32:esp32:heltec_wifi_lora_32_V3
