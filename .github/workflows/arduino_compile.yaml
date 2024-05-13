@@ -18,6 +18,9 @@ jobs:
         arduino-cli lib install "HotButton"
         arduino-cli lib install "RadioLib"
         arduino-cli lib install "ESP8266 and ESP32 OLED driver for SSD1306 displays"
+        arduino-cli lib install "ESP Telnet"
+        arduino-cli lib install "TimeLib"
+        arduino-cli lib install "LoRaWAN_ESP32"
 
     - name: Compile Sketches
       uses: arduino/compile-sketches@v1
