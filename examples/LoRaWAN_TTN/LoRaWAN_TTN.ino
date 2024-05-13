@@ -37,7 +37,7 @@ void setup() {
 
   // initialize radio
   Serial.println("Radio init");
-  uint16_t state = radio.begin();
+  int16_t state = radio.begin();
   if (state != RADIOLIB_ERR_NONE) {
     Serial.println("Radio did not initialize. We'll try again later.");
     goToSleep();
