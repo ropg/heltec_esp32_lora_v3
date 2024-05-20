@@ -137,26 +137,16 @@ This library is unlikely to work as is with any other devices, whether made by H
 
 <hr>
 
-## Setting up - Board Definitions
+## Setting up
 
-Normally, the starting point for making software for a piece of hardware is selecting the board from the "Arduino board manager". If your board isn't an original AVR Arduino, such as any ESP32-based board, you might need to add a "Board Manager URL" in the Arduino IDE. Espressif maintains a long list of ESP32-based boards with their board definition files.
-
-### However ...
-
-Heltec publishes board definitions, both on their own URL which is in some of their documentation and in the (identical) definitions for their products as spread by Espressif. However, these do not let you select a partition table. That's right: if you use their definitions, you **cannot** change partition tables. Definitions for some of their other products do allow for selecting different partition tables, but then they offer a variety of tables for the wrong-size flash chip and leave out some of the right ones. But for these two boards the option is simply just gone from the *"Tools"* menu. My current guess is they didn't plan to do this: somebody just fat-fingered a copy-paste in the `boards.txt` file. But never mind why, let's fix it.
-
-&nbsp;
-
-### Installing the board; the procedure
-
-#### 1. Install this library
+### 1. Install this library
 
 Use the library manager to install this library. Find it by entering "heltec_esp32" in the library manager search box.
 
-#### 2. Add ESP32 URL to settings
+### 2. Add ESP32 URL to settings
 
 ```
-https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+https://espressif.github.io/arduino-esp32/package_esp32_index.json
 ```
 
 ![](images/board_manager_url.png)
@@ -165,56 +155,21 @@ to the additional board manager URL to the Settings of the Arduino IDE.
 
 > *(Make sure this and any URLs that might be already there are sperated by commas. If you hit OK the IDE will then load the files needed.)*
 
-> *Also make sure you remove from that field the board manager URL that starts with ropg.github.io if you added that previously because you used a previous version of this library*
+### 3. Install ESP32
 
-#### 3. Install ESP32
+Go to board manager and install "esp32 by Espressif Systems". At the time of writing this, the latest version is 2.0.16.
 
-Go to board manager and install "esp32 by Espressif Systems". At the time of writing this, the latest version is 2.0.15. If a newer versions exists, use it, but chnage the 2.0.15 in the commands you use below.
+### 4. Select the board
 
-#### 4. Quit the Arduino IDE
-
-#### 5. Adding and changing files
-
-Now we have to copy some files from the directory where this library sits to the hardware directory that holds the board definitions. In addition, we append the contents of one file to the end of a file called boards.txt. To do this, we first have to find where this library is and where the ESP32 hardware definitions are stored.
-
-Here's the shell scripts to do this for the three major operating systems. Before executing these commands, make sure the directories we name `from` and `to` actually exist.
-
-**MacOS:**
-```
-from=~/Documents/Arduino/libraries/Heltec_ESP32_LoRa_v3/boards
-to=~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15
-cp -r $from/variants/* $to/variants/
-cat $from/boards-ht_u.txt >> $to/boards.txt
-```
-
-**Linux:**
-
-```
-from=~/Arduino/libraries/Heltec_ESP32_LoRa_v3/boards
-to=~/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15
-cp -r $from/variants/* $to/variants/
-cat $from/boards-ht_u.txt >> $to/boards.txt
-```
-
-**Windows PowerShell:**
-```
-$from = "~\Documents\Arduino\libraries\Heltec_ESP32_LoRa_v3\boards"
-$to = "~\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.15"
-Copy-Item -Path "$from\variants\*" -Destination "$to\variants\" -Recurse -Force
-Get-Content "$from\boards-ht_u.txt" | Add-Content "$to\boards.txt"
-```
-
-#### 6. Select one of the new boards
-
-Start Arduino IDE and from the board dropdown select "Select another board and port" and enter "ht_u" in the search box. My three board definitions, whose names now start with ht_u (Heltec Unofficial) should show up.
+Start Arduino IDE and from the board dropdown select "Select another board and port" and enter "heltec" in the search box. Select the board named "Heltec WiFi LoRa 32(V3) / Wireless shell(V3)" as in the image below. Do not use any of the other boards, even if they look right.
 
 <img src="images/select_board.png" width="400">
 
-### Not using these board definitions?
+### 5. Stick or Stick Lite?
 
-`#define HELTEC_WIRELESS_STICK`
+If your board is a Wireless Stick or Wireless Stick Lite, you **must** put `#define HELTEC_WIRELESS_STICK` or `#define HELTEC_WIRELESS_STICK_LITE` respectively in your code **before** `#include <heltec_unofficial.h>` or things will not work for you. 
 
-If you use the "official" board definitions, everything will work also, except you cannot change partition table AND if you have the stick, you **must** put `#define HELTEC_WIRELESS_STICK` **before** `#include <heltec_unofficial.h>` or things will not work for you. If you have the stick lite, put `#define HELTEC_WIRELESS_STICK_LITE` before including this library to skip anything related to the display.
+> * _If you have the Stick Lite, the code needs to skip anything related to a display, in case of the Stick, the display dimensions need to be set differently and the "external" power is turned on by default, as it feeds the display._
 
 > * _Main symptom of things not working on the stick is jerky and slow serial output while you are printing to `both` (see below) as the device waits for SPI timeouts from an OLED display that doesn't have power._
 
@@ -260,7 +215,9 @@ Next to the radio examples in this library, all [RadioLib examples](https://gith
 
 &nbsp;
 
-### Convenience macros: `RADIOLIB()` and `RADIOLIB_OR_HALT()`
+### Convenience macros
+
+#### `RADIOLIB()` and `RADIOLIB_OR_HALT()`
 
 This library provides convenience macros when calling RadioLib functions. It can be used for those functions that return a status code. When your code calls
 
@@ -296,13 +253,13 @@ In other words, this saves a whole lot of typing if what you want is for RadioLi
 
 ### LoRaWAN
 
-Using these Heltec chips, you can experiment with LoRaWAN networks such as [The Things Network](https://www.thethingsnetwork.org/). If create an account there and have a gateway somewhere nearby, you can send small binary messages that will show up at the designated server on the internet. You can make an account and use their servers to see your messages appear.
+Using these Heltec chips, you can experiment with LoRaWAN networks such as [The Things Network](https://www.thethingsnetwork.org/). If you create an account there and have a gateway somewhere nearby, you can send small binary messages that will show up at the designated server on the internet. You can make an account and use their servers to see your messages appear.
 
-Because of the limited throughput (a few small messages every once in a while) LoRaWAN is really most suitable for sensors, meter readings and things like that. To use it with the Heltec boards, you'd probable want to make the device go to deep sleep between readings, so the battery would last a nice long time.
+Because of the limited throughput (a few small messages every once in a while) LoRaWAN is really most suitable for sensors, meter readings and things like that. To use it with the Heltec boards, you'd probably want to make the device go to deep sleep between readings, so the battery would last a nice long time.
 
 To speak LoRaWAN, you need to store some provisioning information such as identifiers and cryptographic keys. In addition to that, the RadioLib LoRaWAN code needs the user to hang on to some session state during long sleep to resume the same session. I wrote another library, called **[LoRaWAN_ESP32](https://github.com/ropg/LoRaWAN_ESP32)** to manage both the provisioning data and the session state in flash. Please refer to that library's README for more details.
 
-If you install LoRaWAN_ESP32, you can compile the example called [LoRaWAN_TTN](/examples/LoRaWAN_TTN/LoRaWAN_TTN.ino) that comes with this library to see it in action. (That example is nearly identical to the example that comes with LaRaWAN_ESP32, just set up to have this library provide the radio instance so that you could use the display or other features if you wanted to.)
+If you install the LoRaWAN_ESP32 library, you can compile the example called [LoRaWAN_TTN](/examples/LoRaWAN_TTN/LoRaWAN_TTN.ino) that comes with this library to see it in action. (That example is nearly identical to the example that comes with LaRaWAN_ESP32, just set up to have this library provide the radio instance.)
 
 <hr>
 
