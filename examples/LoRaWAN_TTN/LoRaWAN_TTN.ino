@@ -45,7 +45,7 @@ void setup() {
 
   node = persist.manage(&radio);
 
-  if (!node->isJoined()) {
+  if (!node->isActivated()) {
     Serial.println("Could not join network. We'll try again later.");
     goToSleep();
   }
@@ -64,7 +64,7 @@ void setup() {
 
   state = node->sendReceive(uplinkData, sizeof(uplinkData), 1, downlinkData, &lenDown);
 
-  if(state == RADIOLIB_ERR_NONE || state == RADIOLIB_ERR_RX_TIMEOUT) {
+  if(state == RADIOLIB_ERR_NONE || state == RADIOLIB_LORAWAN_NO_DOWNLINK) {
     Serial.println("Message sent");
   } else {
     Serial.printf("sendReceive returned error %d, we'll try again later.\n", state);
