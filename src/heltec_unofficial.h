@@ -18,7 +18,9 @@
 #endif
 
 // 'PRG' Button
+#ifndef BUTTON
 #define BUTTON    GPIO_NUM_0
+#endif
 // LED pin & PWM parameters
 #define LED_PIN   GPIO_NUM_35
 #define LED_FREQ  5000
