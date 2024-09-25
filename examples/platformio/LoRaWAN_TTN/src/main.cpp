@@ -19,8 +19,7 @@
 // longer if regulatory or TTN Fair Use Policy requires it.)
 #define MINIMUM_DELAY 900 
 
-// Heltec board-specific includes
-#define HELTEC_WIRELESS_STICK
+
 #include <heltec_unofficial.h>
 #include <LoRaWAN_ESP32.h>
 #include <RadioLib.h>
