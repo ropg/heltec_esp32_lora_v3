@@ -64,8 +64,10 @@ void setup() {
 
   state = node->sendReceive(uplinkData, sizeof(uplinkData), 1, downlinkData, &lenDown);
 
-  if(state == RADIOLIB_ERR_NONE || state == RADIOLIB_LORAWAN_NO_DOWNLINK) {
-    Serial.println("Message sent");
+  if(state == RADIOLIB_ERR_NONE) {
+    Serial.println("Message sent, no downlink received.");
+  } else if (state > 0) {
+    Serial.println("Message sent, downlink received.");
   } else {
     Serial.printf("sendReceive returned error %d, we'll try again later.\n", state);
   }
