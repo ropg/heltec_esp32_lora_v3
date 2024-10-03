@@ -1,0 +1,365 @@
+
+############################################################
+###                  Heltec Unofficial                   ###
+###                                                      ###
+###     https://github.com/ropg/heltec_esp32_lora_v3     ###
+############################################################
+
+ht_u_esp32_lora_v3.name=HT_U ESP32 LoRa v3
+ht_u_esp32_lora_v3.vid.0=0x10c4
+ht_u_esp32_lora_v3.pid.0=0xea60
+
+ht_u_esp32_lora_v3.bootloader.tool=esptool_py
+ht_u_esp32_lora_v3.bootloader.tool.default=esptool_py
+
+ht_u_esp32_lora_v3.upload.tool=esptool_py
+ht_u_esp32_lora_v3.upload.tool.default=esptool_py
+ht_u_esp32_lora_v3.upload.tool.network=esp_ota
+
+ht_u_esp32_lora_v3.upload.maximum_size=3342336
+ht_u_esp32_lora_v3.upload.maximum_data_size=327680
+ht_u_esp32_lora_v3.upload.flags=
+ht_u_esp32_lora_v3.upload.extra_flags=
+ht_u_esp32_lora_v3.upload.use_1200bps_touch=false
+ht_u_esp32_lora_v3.upload.wait_for_upload_port=false
+
+ht_u_esp32_lora_v3.serial.disableDTR=false
+ht_u_esp32_lora_v3.serial.disableRTS=false
+
+ht_u_esp32_lora_v3.build.tarch=xtensa
+ht_u_esp32_lora_v3.build.bootloader_addr=0x0
+ht_u_esp32_lora_v3.build.target=esp32s3
+ht_u_esp32_lora_v3.build.mcu=esp32s3
+ht_u_esp32_lora_v3.build.core=esp32
+ht_u_esp32_lora_v3.build.variant=ht_u_esp32_lora_v3
+ht_u_esp32_lora_v3.build.board=ht_u_esp32_lora_v3
+
+ht_u_esp32_lora_v3.build.usb_mode=1
+ht_u_esp32_lora_v3.build.cdc_on_boot=0
+ht_u_esp32_lora_v3.build.msc_on_boot=0
+ht_u_esp32_lora_v3.build.dfu_on_boot=0
+ht_u_esp32_lora_v3.build.f_cpu=240000000L
+ht_u_esp32_lora_v3.build.flash_size=8MB
+ht_u_esp32_lora_v3.build.flash_freq=80m
+ht_u_esp32_lora_v3.build.flash_mode=dio
+ht_u_esp32_lora_v3.build.boot=qio
+ht_u_esp32_lora_v3.build.boot_freq=80m
+ht_u_esp32_lora_v3.build.partitions=default_8MB
+ht_u_esp32_lora_v3.build.loop_core=
+ht_u_esp32_lora_v3.build.event_core=
+ht_u_esp32_lora_v3.build.psram_type=qspi
+ht_u_esp32_lora_v3.build.memory_type={build.boot}_{build.psram_type}
+
+ht_u_esp32_lora_v3.menu.LoopCore.1=Core 1
+ht_u_esp32_lora_v3.menu.LoopCore.1.build.loop_core=-DARDUINO_RUNNING_CORE=1
+ht_u_esp32_lora_v3.menu.LoopCore.0=Core 0
+ht_u_esp32_lora_v3.menu.LoopCore.0.build.loop_core=-DARDUINO_RUNNING_CORE=0
+
+ht_u_esp32_lora_v3.menu.EventsCore.1=Core 1
+ht_u_esp32_lora_v3.menu.EventsCore.1.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=1
+ht_u_esp32_lora_v3.menu.EventsCore.0=Core 0
+ht_u_esp32_lora_v3.menu.EventsCore.0.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=0
+
+ht_u_esp32_lora_v3.menu.CPUFreq.240=240MHz (WiFi)
+ht_u_esp32_lora_v3.menu.CPUFreq.240.build.f_cpu=240000000L
+ht_u_esp32_lora_v3.menu.CPUFreq.160=160MHz (WiFi)
+ht_u_esp32_lora_v3.menu.CPUFreq.160.build.f_cpu=160000000L
+ht_u_esp32_lora_v3.menu.CPUFreq.80=80MHz (WiFi)
+ht_u_esp32_lora_v3.menu.CPUFreq.80.build.f_cpu=80000000L
+ht_u_esp32_lora_v3.menu.CPUFreq.40=40MHz
+ht_u_esp32_lora_v3.menu.CPUFreq.40.build.f_cpu=40000000L
+ht_u_esp32_lora_v3.menu.CPUFreq.20=20MHz
+ht_u_esp32_lora_v3.menu.CPUFreq.20.build.f_cpu=20000000L
+ht_u_esp32_lora_v3.menu.CPUFreq.10=10MHz
+ht_u_esp32_lora_v3.menu.CPUFreq.10.build.f_cpu=10000000L
+
+ht_u_esp32_lora_v3.menu.UploadSpeed.921600=921600
+ht_u_esp32_lora_v3.menu.UploadSpeed.921600.upload.speed=921600
+ht_u_esp32_lora_v3.menu.UploadSpeed.115200=115200
+ht_u_esp32_lora_v3.menu.UploadSpeed.115200.upload.speed=115200
+ht_u_esp32_lora_v3.menu.UploadSpeed.256000.windows=256000
+ht_u_esp32_lora_v3.menu.UploadSpeed.256000.upload.speed=256000
+ht_u_esp32_lora_v3.menu.UploadSpeed.230400.windows.upload.speed=256000
+ht_u_esp32_lora_v3.menu.UploadSpeed.230400=230400
+ht_u_esp32_lora_v3.menu.UploadSpeed.230400.upload.speed=230400
+ht_u_esp32_lora_v3.menu.UploadSpeed.460800.linux=460800
+ht_u_esp32_lora_v3.menu.UploadSpeed.460800.macosx=460800
+ht_u_esp32_lora_v3.menu.UploadSpeed.460800.upload.speed=460800
+ht_u_esp32_lora_v3.menu.UploadSpeed.512000.windows=512000
+ht_u_esp32_lora_v3.menu.UploadSpeed.512000.upload.speed=512000
+
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_8MB=Default spiffs (3.25MB APP/1.5MB SPIFFS)
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_8MB.build.partitions=default_8MB
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_ffat_8MB=Default FFAT (3.25MB APP/1.5MB FATFS)
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_ffat_8MB.build.partitions=default_ffat_8MB
+ht_u_esp32_lora_v3.menu.PartitionScheme.default_ffat_8MB.upload.maximum_size=3342336
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_ffat_8MB=Large FFAT (1.3MB APP/5.4MB FATFS)
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_ffat_8MB.build.partitions=large_ffat_8MB
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_ffat_8MB.upload.maximum_size=1310720
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_spiffs_8MB=Large spiffs (1.3MB APP/5.4MB SPIFFS)
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_spiffs_8MB.build.partitions=large_spiffs_8MB
+ht_u_esp32_lora_v3.menu.PartitionScheme.large_spiffs_8MB.upload.maximum_size=1310720
+ht_u_esp32_lora_v3.menu.PartitionScheme.max_app_8MB=Maximum APP (7.9MB APP No OTA/No FS)
+ht_u_esp32_lora_v3.menu.PartitionScheme.max_app_8MB.build.partitions=max_app_8MB
+ht_u_esp32_lora_v3.menu.PartitionScheme.max_app_8MB.upload.maximum_size=8257536
+
+ht_u_esp32_lora_v3.menu.DebugLevel.none=None
+ht_u_esp32_lora_v3.menu.DebugLevel.none.build.code_debug=0
+ht_u_esp32_lora_v3.menu.DebugLevel.error=Error
+ht_u_esp32_lora_v3.menu.DebugLevel.error.build.code_debug=1
+ht_u_esp32_lora_v3.menu.DebugLevel.warn=Warn
+ht_u_esp32_lora_v3.menu.DebugLevel.warn.build.code_debug=2
+ht_u_esp32_lora_v3.menu.DebugLevel.info=Info
+ht_u_esp32_lora_v3.menu.DebugLevel.info.build.code_debug=3
+ht_u_esp32_lora_v3.menu.DebugLevel.debug=Debug
+ht_u_esp32_lora_v3.menu.DebugLevel.debug.build.code_debug=4
+ht_u_esp32_lora_v3.menu.DebugLevel.verbose=Verbose
+ht_u_esp32_lora_v3.menu.DebugLevel.verbose.build.code_debug=5
+
+ht_u_esp32_lora_v3.build.defines=
+
+ht_u_esp32_lora_v3.menu.EraseFlash.none=Disabled
+ht_u_esp32_lora_v3.menu.EraseFlash.none.upload.erase_cmd=
+ht_u_esp32_lora_v3.menu.EraseFlash.all=Enabled
+ht_u_esp32_lora_v3.menu.EraseFlash.all.upload.erase_cmd=-e
+
+
+ht_u_wireless_stick_v3.name=HT_U Wireless Stick v3
+ht_u_esp32_lora_v3.vid.0=0x10c4
+ht_u_esp32_lora_v3.pid.0=0xea60
+
+ht_u_wireless_stick_v3.bootloader.tool=esptool_py
+ht_u_wireless_stick_v3.bootloader.tool.default=esptool_py
+
+ht_u_wireless_stick_v3.upload.tool=esptool_py
+ht_u_wireless_stick_v3.upload.tool.default=esptool_py
+ht_u_wireless_stick_v3.upload.tool.network=esp_ota
+
+ht_u_wireless_stick_v3.upload.maximum_size=3342336
+ht_u_wireless_stick_v3.upload.maximum_data_size=327680
+ht_u_wireless_stick_v3.upload.flags=
+ht_u_wireless_stick_v3.upload.extra_flags=
+ht_u_wireless_stick_v3.upload.use_1200bps_touch=false
+ht_u_wireless_stick_v3.upload.wait_for_upload_port=false
+
+ht_u_wireless_stick_v3.serial.disableDTR=false
+ht_u_wireless_stick_v3.serial.disableRTS=false
+
+ht_u_wireless_stick_v3.build.tarch=xtensa
+ht_u_wireless_stick_v3.build.bootloader_addr=0x0
+ht_u_wireless_stick_v3.build.target=esp32s3
+ht_u_wireless_stick_v3.build.mcu=esp32s3
+ht_u_wireless_stick_v3.build.core=esp32
+ht_u_wireless_stick_v3.build.variant=ht_u_wireless_stick_v3
+ht_u_wireless_stick_v3.build.board=ht_u_wireless_stick_v3
+
+ht_u_wireless_stick_v3.build.usb_mode=1
+ht_u_wireless_stick_v3.build.cdc_on_boot=0
+ht_u_wireless_stick_v3.build.msc_on_boot=0
+ht_u_wireless_stick_v3.build.dfu_on_boot=0
+ht_u_wireless_stick_v3.build.f_cpu=240000000L
+ht_u_wireless_stick_v3.build.flash_size=8MB
+ht_u_wireless_stick_v3.build.flash_freq=80m
+ht_u_wireless_stick_v3.build.flash_mode=dio
+ht_u_wireless_stick_v3.build.boot=qio
+ht_u_wireless_stick_v3.build.boot_freq=80m
+ht_u_wireless_stick_v3.build.partitions=default_8MB
+ht_u_wireless_stick_v3.build.loop_core=
+ht_u_wireless_stick_v3.build.event_core=
+ht_u_wireless_stick_v3.build.psram_type=qspi
+ht_u_wireless_stick_v3.build.memory_type={build.boot}_{build.psram_type}
+
+ht_u_wireless_stick_v3.menu.LoopCore.1=Core 1
+ht_u_wireless_stick_v3.menu.LoopCore.1.build.loop_core=-DARDUINO_RUNNING_CORE=1
+ht_u_wireless_stick_v3.menu.LoopCore.0=Core 0
+ht_u_wireless_stick_v3.menu.LoopCore.0.build.loop_core=-DARDUINO_RUNNING_CORE=0
+
+ht_u_wireless_stick_v3.menu.EventsCore.1=Core 1
+ht_u_wireless_stick_v3.menu.EventsCore.1.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=1
+ht_u_wireless_stick_v3.menu.EventsCore.0=Core 0
+ht_u_wireless_stick_v3.menu.EventsCore.0.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=0
+
+ht_u_wireless_stick_v3.menu.CPUFreq.240=240MHz (WiFi)
+ht_u_wireless_stick_v3.menu.CPUFreq.240.build.f_cpu=240000000L
+ht_u_wireless_stick_v3.menu.CPUFreq.160=160MHz (WiFi)
+ht_u_wireless_stick_v3.menu.CPUFreq.160.build.f_cpu=160000000L
+ht_u_wireless_stick_v3.menu.CPUFreq.80=80MHz (WiFi)
+ht_u_wireless_stick_v3.menu.CPUFreq.80.build.f_cpu=80000000L
+ht_u_wireless_stick_v3.menu.CPUFreq.40=40MHz
+ht_u_wireless_stick_v3.menu.CPUFreq.40.build.f_cpu=40000000L
+ht_u_wireless_stick_v3.menu.CPUFreq.20=20MHz
+ht_u_wireless_stick_v3.menu.CPUFreq.20.build.f_cpu=20000000L
+ht_u_wireless_stick_v3.menu.CPUFreq.10=10MHz
+ht_u_wireless_stick_v3.menu.CPUFreq.10.build.f_cpu=10000000L
+
+ht_u_wireless_stick_v3.menu.UploadSpeed.921600=921600
+ht_u_wireless_stick_v3.menu.UploadSpeed.921600.upload.speed=921600
+ht_u_wireless_stick_v3.menu.UploadSpeed.115200=115200
+ht_u_wireless_stick_v3.menu.UploadSpeed.115200.upload.speed=115200
+ht_u_wireless_stick_v3.menu.UploadSpeed.256000.windows=256000
+ht_u_wireless_stick_v3.menu.UploadSpeed.256000.upload.speed=256000
+ht_u_wireless_stick_v3.menu.UploadSpeed.230400.windows.upload.speed=256000
+ht_u_wireless_stick_v3.menu.UploadSpeed.230400=230400
+ht_u_wireless_stick_v3.menu.UploadSpeed.230400.upload.speed=230400
+ht_u_wireless_stick_v3.menu.UploadSpeed.460800.linux=460800
+ht_u_wireless_stick_v3.menu.UploadSpeed.460800.macosx=460800
+ht_u_wireless_stick_v3.menu.UploadSpeed.460800.upload.speed=460800
+ht_u_wireless_stick_v3.menu.UploadSpeed.512000.windows=512000
+ht_u_wireless_stick_v3.menu.UploadSpeed.512000.upload.speed=512000
+
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_8MB=Default spiffs (3.25MB APP/1.5MB SPIFFS)
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_8MB.build.partitions=default_8MB
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_ffat_8MB=Default FFAT (3.25MB APP/1.5MB FATFS)
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_ffat_8MB.build.partitions=default_ffat_8MB
+ht_u_wireless_stick_v3.menu.PartitionScheme.default_ffat_8MB.upload.maximum_size=3342336
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_ffat_8MB=Large FFAT (1.3MB APP/5.4MB FATFS)
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_ffat_8MB.build.partitions=large_ffat_8MB
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_ffat_8MB.upload.maximum_size=1310720
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_spiffs_8MB=Large spiffs (1.3MB APP/5.4MB SPIFFS)
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_spiffs_8MB.build.partitions=large_spiffs_8MB
+ht_u_wireless_stick_v3.menu.PartitionScheme.large_spiffs_8MB.upload.maximum_size=1310720
+ht_u_wireless_stick_v3.menu.PartitionScheme.max_app_8MB=Maximum APP (7.9MB APP No OTA/No FS)
+ht_u_wireless_stick_v3.menu.PartitionScheme.max_app_8MB.build.partitions=max_app_8MB
+ht_u_wireless_stick_v3.menu.PartitionScheme.max_app_8MB.upload.maximum_size=8257536
+
+ht_u_wireless_stick_v3.menu.DebugLevel.none=None
+ht_u_wireless_stick_v3.menu.DebugLevel.none.build.code_debug=0
+ht_u_wireless_stick_v3.menu.DebugLevel.error=Error
+ht_u_wireless_stick_v3.menu.DebugLevel.error.build.code_debug=1
+ht_u_wireless_stick_v3.menu.DebugLevel.warn=Warn
+ht_u_wireless_stick_v3.menu.DebugLevel.warn.build.code_debug=2
+ht_u_wireless_stick_v3.menu.DebugLevel.info=Info
+ht_u_wireless_stick_v3.menu.DebugLevel.info.build.code_debug=3
+ht_u_wireless_stick_v3.menu.DebugLevel.debug=Debug
+ht_u_wireless_stick_v3.menu.DebugLevel.debug.build.code_debug=4
+ht_u_wireless_stick_v3.menu.DebugLevel.verbose=Verbose
+ht_u_wireless_stick_v3.menu.DebugLevel.verbose.build.code_debug=5
+
+ht_u_wireless_stick_v3.build.defines=-DHELTEC_WIRELESS_STICK
+
+ht_u_wireless_stick_v3.menu.EraseFlash.none=Disabled
+ht_u_wireless_stick_v3.menu.EraseFlash.none.upload.erase_cmd=
+ht_u_wireless_stick_v3.menu.EraseFlash.all=Enabled
+ht_u_wireless_stick_v3.menu.EraseFlash.all.upload.erase_cmd=-e
+
+
+ht_u_wireless_stick_lite_v3.name=HT_U Wireless Stick Lite v3
+ht_u_esp32_lora_v3.vid.0=0x10c4
+ht_u_esp32_lora_v3.pid.0=0xea60
+
+ht_u_wireless_stick_lite_v3.bootloader.tool=esptool_py
+ht_u_wireless_stick_lite_v3.bootloader.tool.default=esptool_py
+
+ht_u_wireless_stick_lite_v3.upload.tool=esptool_py
+ht_u_wireless_stick_lite_v3.upload.tool.default=esptool_py
+ht_u_wireless_stick_lite_v3.upload.tool.network=esp_ota
+
+ht_u_wireless_stick_lite_v3.upload.maximum_size=3342336
+ht_u_wireless_stick_lite_v3.upload.maximum_data_size=327680
+ht_u_wireless_stick_lite_v3.upload.flags=
+ht_u_wireless_stick_lite_v3.upload.extra_flags=
+ht_u_wireless_stick_lite_v3.upload.use_1200bps_touch=false
+ht_u_wireless_stick_lite_v3.upload.wait_for_upload_port=false
+
+ht_u_wireless_stick_lite_v3.serial.disableDTR=false
+ht_u_wireless_stick_lite_v3.serial.disableRTS=false
+
+ht_u_wireless_stick_lite_v3.build.tarch=xtensa
+ht_u_wireless_stick_lite_v3.build.bootloader_addr=0x0
+ht_u_wireless_stick_lite_v3.build.target=esp32s3
+ht_u_wireless_stick_lite_v3.build.mcu=esp32s3
+ht_u_wireless_stick_lite_v3.build.core=esp32
+ht_u_wireless_stick_lite_v3.build.variant=ht_u_wireless_stick_lite_v3
+ht_u_wireless_stick_lite_v3.build.board=ht_u_wireless_stick_lite_v3
+
+ht_u_wireless_stick_lite_v3.build.usb_mode=1
+ht_u_wireless_stick_lite_v3.build.cdc_on_boot=0
+ht_u_wireless_stick_lite_v3.build.msc_on_boot=0
+ht_u_wireless_stick_lite_v3.build.dfu_on_boot=0
+ht_u_wireless_stick_lite_v3.build.f_cpu=240000000L
+ht_u_wireless_stick_lite_v3.build.flash_size=8MB
+ht_u_wireless_stick_lite_v3.build.flash_freq=80m
+ht_u_wireless_stick_lite_v3.build.flash_mode=dio
+ht_u_wireless_stick_lite_v3.build.boot=qio
+ht_u_wireless_stick_lite_v3.build.boot_freq=80m
+ht_u_wireless_stick_lite_v3.build.partitions=default_8MB
+ht_u_wireless_stick_lite_v3.build.loop_core=
+ht_u_wireless_stick_lite_v3.build.event_core=
+ht_u_wireless_stick_lite_v3.build.psram_type=qspi
+ht_u_wireless_stick_lite_v3.build.memory_type={build.boot}_{build.psram_type}
+
+ht_u_wireless_stick_lite_v3.menu.LoopCore.1=Core 1
+ht_u_wireless_stick_lite_v3.menu.LoopCore.1.build.loop_core=-DARDUINO_RUNNING_CORE=1
+ht_u_wireless_stick_lite_v3.menu.LoopCore.0=Core 0
+ht_u_wireless_stick_lite_v3.menu.LoopCore.0.build.loop_core=-DARDUINO_RUNNING_CORE=0
+
+ht_u_wireless_stick_lite_v3.menu.EventsCore.1=Core 1
+ht_u_wireless_stick_lite_v3.menu.EventsCore.1.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=1
+ht_u_wireless_stick_lite_v3.menu.EventsCore.0=Core 0
+ht_u_wireless_stick_lite_v3.menu.EventsCore.0.build.event_core=-DARDUINO_EVENT_RUNNING_CORE=0
+
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.240=240MHz (WiFi)
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.240.build.f_cpu=240000000L
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.160=160MHz (WiFi)
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.160.build.f_cpu=160000000L
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.80=80MHz (WiFi)
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.80.build.f_cpu=80000000L
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.40=40MHz
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.40.build.f_cpu=40000000L
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.20=20MHz
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.20.build.f_cpu=20000000L
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.10=10MHz
+ht_u_wireless_stick_lite_v3.menu.CPUFreq.10.build.f_cpu=10000000L
+
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.921600=921600
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.921600.upload.speed=921600
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.115200=115200
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.115200.upload.speed=115200
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.256000.windows=256000
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.256000.upload.speed=256000
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.230400.windows.upload.speed=256000
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.230400=230400
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.230400.upload.speed=230400
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.460800.linux=460800
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.460800.macosx=460800
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.460800.upload.speed=460800
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.512000.windows=512000
+ht_u_wireless_stick_lite_v3.menu.UploadSpeed.512000.upload.speed=512000
+
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_8MB=Default spiffs (3.25MB APP/1.5MB SPIFFS)
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_8MB.build.partitions=default_8MB
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_8MB.upload.maximum_size=3342336
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_ffat_8MB=Default FFAT (3.25MB APP/1.5MB FATFS)
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_ffat_8MB.build.partitions=default_ffat_8MB
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.default_ffat_8MB.upload.maximum_size=3342336
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_ffat_8MB=Large FFAT (1.3MB APP/5.4MB FATFS)
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_ffat_8MB.build.partitions=large_ffat_8MB
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_ffat_8MB.upload.maximum_size=1310720
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_spiffs_8MB=Large spiffs (1.3MB APP/5.4MB SPIFFS)
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_spiffs_8MB.build.partitions=large_spiffs_8MB
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.large_spiffs_8MB.upload.maximum_size=1310720
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.max_app_8MB=Maximum APP (7.9MB APP No OTA/No FS)
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.max_app_8MB.build.partitions=max_app_8MB
+ht_u_wireless_stick_lite_v3.menu.PartitionScheme.max_app_8MB.upload.maximum_size=8257536
+
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.none=None
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.none.build.code_debug=0
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.error=Error
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.error.build.code_debug=1
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.warn=Warn
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.warn.build.code_debug=2
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.info=Info
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.info.build.code_debug=3
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.debug=Debug
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.debug.build.code_debug=4
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.verbose=Verbose
+ht_u_wireless_stick_lite_v3.menu.DebugLevel.verbose.build.code_debug=5
+
+ht_u_wireless_stick_lite_v3.build.defines=-DHELTEC_WIRELESS_STICK_LITE
+
+ht_u_wireless_stick_lite_v3.menu.EraseFlash.none=Disabled
+ht_u_wireless_stick_lite_v3.menu.EraseFlash.none.upload.erase_cmd=
+ht_u_wireless_stick_lite_v3.menu.EraseFlash.all=Enabled
+ht_u_wireless_stick_lite_v3.menu.EraseFlash.all.upload.erase_cmd=-e

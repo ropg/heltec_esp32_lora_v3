@@ -1,0 +1,29 @@
+name: Compile Arduino Sketches
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
+
+    - name: Install Dependencies
+      run: |
+        arduino-cli lib install "HotButton"
+        arduino-cli lib install "RadioLib"
+        arduino-cli lib install "ESP8266 and ESP32 OLED driver for SSD1306 displays"
+        arduino-cli lib install "ESP Telnet"
+        arduino-cli lib install "Time"
+        arduino-cli lib install "LoRaWAN_ESP32"
+
+    - name: Compile Sketches
+      uses: arduino/compile-sketches@v1
+      with:
+        fqbn: esp32:esp32:heltec_wifi_lora_32_V3
+        # fqbn: esp32:esp32:esp32s3
