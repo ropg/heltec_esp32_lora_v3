@@ -36,8 +36,9 @@
 // set anywhere between -9 dBm (0.125 mW) to 22 dBm (158 mW). Note that the maximum ERP
 // (which is what your antenna maximally radiates) on the EU ISM band is 25 mW, and that
 // transmissting without an antenna can damage your hardware.
+// 14dBm for 25mW.
 #define TRANSMIT_POWER      0
-
+//#define TRANSMIT_POWER      14
 String rxdata;
 volatile bool rxFlag = false;
 long counter = 0;

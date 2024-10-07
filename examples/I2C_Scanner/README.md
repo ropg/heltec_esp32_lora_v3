@@ -1,6 +1,6 @@
-# Heltec ESP32 I2C Scanner
+# I2C Scanner
 
-This project is a simple example of using the I2C bus with the Heltec ESP32. It allows scanning for I2C devices connected to the I2C buses I2C0 and I2C1.
+This project is a simple example of using the I2C bus. It allows scanning for I2C devices connected to the I2C buses I2C0 and I2C1.
 
 ## Functionality
 

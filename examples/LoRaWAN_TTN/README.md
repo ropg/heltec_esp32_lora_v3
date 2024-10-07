@@ -11,10 +11,11 @@ This project demonstrates sending a two-byte LoRaWAN message using the Heltec ES
 
 ## Features
 
+- If The Things Network (TTN) or LoRaWAN provisioning information is not stored, the user will be prompted via serial to enter it the first time. Then it is stored in the flash. when you want to change the data erase with "complete" option.
 - Sends a two-byte LoRaWAN message every 15 minutes.
   - The first byte is an 8-bit counter.
   - The second byte is the ESP32 chip temperature (in Celsius, offset by +100).
-- If The Things Network (TTN) or LoRaWAN provisioning information is not stored, the user will be prompted via serial to enter it.
+
 - Manages duty cycle compliance with TTN's Fair Use Policy.
 
 ## How It Works
@@ -36,11 +37,17 @@ This project demonstrates sending a two-byte LoRaWAN message using the Heltec ES
 4. Select the correct board (Heltec ESP32 LoRa V3) under `Tools > Board`.
 
 ## Usage
+
+1. If have free account at the things network ( https://eu1.cloud.thethings.network/ )
+you can generate your credentials:
 ![TTN](TTN.png)
 1. Flash the code to your Heltec ESP32 LoRa V3 module.
-2. On first boot, enter TTN/LoRaWAN credentials via the serial monitor.
-3. The device will then send a message every 15 minutes with the counter and temperature data.
-4. Monitor the serial port for feedback and temperature readings.
+
+3. On first boot, enter TTN/LoRaWAN credentials via the serial monitor.
+
+4. The device will then send a message every 15 minutes with the counter and temperature data.
+
+5. Monitor the serial port for feedback and temperature readings.
 
 ## License
 

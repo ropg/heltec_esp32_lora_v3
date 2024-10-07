@@ -24,7 +24,7 @@
 #include <LoRaWAN_ESP32.h>
 
 LoRaWANNode* node;
-
+int TxPower = 14;
 RTC_DATA_ATTR uint8_t count = 0;
 
 void setup() {
@@ -44,7 +44,8 @@ void setup() {
   }
 
   node = persist.manage(&radio);
-
+  node->setTxPower(TxPower);
+  Serial.printf("Current TX Power: %d dBm\n", TxPower);
   if (!node->isActivated()) {
     Serial.println("Could not join network. We'll try again later.");
     goToSleep();
@@ -53,7 +54,6 @@ void setup() {
   // If we're still here, it means we joined, and we can send something
 
   // Manages uplink intervals to the TTN Fair Use Policy
-  node->setDutyCycle(true, 1250);
 
   uint8_t uplinkData[2];
   uplinkData[0] = count++;
