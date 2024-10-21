@@ -112,7 +112,7 @@ OverlayCallback overlays[] = { msOverlay };
 int overlaysCount = 1;
 
 void setup() {
-  Serial.begin(115200);
+  heltec_setup();
   Serial.println();
   Serial.println();
 
