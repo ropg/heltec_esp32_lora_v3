@@ -320,7 +320,7 @@ In deep sleep, with this library, according my multimeter power consumption drop
 
 ## LED
 
-The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led()` that takes the LED brightness in percent. It's really bight, you'll probably find 50% brightness is plenty.
+The board has a bright white LED, next to the orange power/charge LED. This library provides a function `heltec_led()` that takes the LED brightness in percent. It's really bright, you'll probably find 50% brightness is plenty.
 
 &nbsp;
 
