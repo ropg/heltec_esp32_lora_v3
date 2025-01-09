@@ -17,6 +17,11 @@
   #include "driver/temp_sensor.h"
 #endif
 
+#define HELTEC_WIFI_32_LORA_V3_2
+#ifndef HELTEC_WIFI_32_LORA_V3_2
+#define HELTEC_WIFI_32_LORA_V3_1
+#endif
+
 // 'PRG' Button
 #ifndef BUTTON
 #define BUTTON    GPIO_NUM_0
@@ -198,12 +203,19 @@ void heltec_ve(bool state) {
  * This function measures the battery voltage by controlling the VBAT_CTRL pin
  * and reading the analog value from the VBAT_ADC pin. The measured voltage is
  * then converted to a float value and returned.
+ * Note: VBAT_ADC value is normally displayed when VBAT_CTRL is changed to HIGH in V3.2 version
+ * @See http://community.heltec.cn/t/heltec-wifi-lora32-v3-2-new-revision/16726/7
  *
  * @return The battery voltage in volts.
  */
 float heltec_vbat() {
   pinMode(VBAT_CTRL, OUTPUT);
+  #ifdef HELTEC_WIFI_32_LORA_V3_2
+  digitalWrite(VBAT_CTRL, HIGH);
+  #endif
+  #ifdef HELTEC_WIFI_32_LORA_V3_1
   digitalWrite(VBAT_CTRL, LOW);
+  #endif
   delay(5);
   float vbat = analogRead(VBAT_ADC) / 238.7;
   // pulled up, no need to drive it
