@@ -329,7 +329,10 @@ float heltec_temperature() {
     int range_end[]   = {  20,  50,  80, 100, 125 };
     temperature_sensor_handle_t temp_handle = NULL;
     for (int n = 0; n < 5; n++) {
-      temperature_sensor_config_t temp_sensor_config = TEMPERATURE_SENSOR_CONFIG_DEFAULT(range_start[n], range_end[n]);
+      temperature_sensor_config_t temp_sensor_config = {
+        .range_min = range_start[n],
+        .range_max = range_end[n],
+     };
       ESP_ERROR_CHECK(temperature_sensor_install(&temp_sensor_config, &temp_handle));
       ESP_ERROR_CHECK(temperature_sensor_enable(temp_handle));
       ESP_ERROR_CHECK(temperature_sensor_get_celsius(temp_handle, &result));
